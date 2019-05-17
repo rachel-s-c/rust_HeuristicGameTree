@@ -57,7 +57,7 @@ impl<'a> ticgame<'a>
         false
     }
 
-    fn check_win(& mut self) -> bool
+    fn check_win(& mut self) -> (bool, &str)
     {
         let mut X = Vec::new();
         let mut O = Vec::new();
@@ -77,10 +77,15 @@ impl<'a> ticgame<'a>
 
         for vecs in ticwins
             {
-                if
-            }
+                if X.contains(vecs[0]) & X.contains(vecs[1]) & X.contains(vecs[2]){
+                    return (true, "X")
+                }
 
-        false
+                if O.contains(vecs[0]) & X.contains(vecs[1]) & X.contains(vecs[2]){
+                    return (true, "O")
+                }
+            }
+        (false, "")
     }
 }
 
