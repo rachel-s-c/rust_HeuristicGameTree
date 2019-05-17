@@ -13,16 +13,48 @@ pub fn lets_play(game: usize, diff: usize)
         }
 }
 
+pub enum Piece {
+    X,
+    O,
+    None
+}
+
+impl Piece {
+    fn is_X(&self) -> bool {
+        if let Piece::X = self {
+            true
+        }
+        else {false}
+    }
+    fn is_Y(&self) -> bool {
+        if let Piece::Y = self {
+            true
+        }
+        else {false}
+    }
+    fn is_None(&self) -> bool {
+        if let Piece::None = self {
+            true
+        }
+        else {false}
+    }
+}
+
 struct ticgame<'a>
 {
-    board: Vec<&'a str>,
+    board: Vec<&'a Piece>,
+    winner: Option<Piece>,
 }
 
 impl<'a> ticgame<'a>
 {
     fn new() -> Self
     {
-        ticgame{board: vec![""; 9]}
+
+        ticgame {
+            board: vec![None; 9],
+            winner: None,
+        }
     }
 
     fn printboard(& mut self)
@@ -33,7 +65,7 @@ impl<'a> ticgame<'a>
         println!("C {}  {}  {}", self.board[6], self.board[7], self.board[8]);
     }
 
-    fn validmove(& mut self, row: &'a str, col: usize) -> bool
+    fn validmove(self, row: &'a str, col: usize) -> (bool, usize)
     {
         if row == "A" || row == "B" || row == "C"
         {
@@ -47,14 +79,18 @@ impl<'a> ticgame<'a>
                         _ => 100,
                     };
 
-                if self.board[int + col] == ""
+                if self.board[int + col] == None
                 {
-                    true;
+                    (true, int+col)
                 }
             }
         }
 
-        false
+        (false, 10)
+    }
+
+    fn store_move(&mut self, position:usize, ){
+        //self.board[position] =
     }
 
     fn check_win(& mut self) -> (bool, &str)
@@ -74,7 +110,6 @@ impl<'a> ticgame<'a>
                 O.push(index);
             }
         }
-
         for vecs in ticwins
             {
                 if X.contains(vecs[0]) & X.contains(vecs[1]) & X.contains(vecs[2]){
