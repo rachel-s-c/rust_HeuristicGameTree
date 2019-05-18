@@ -1,5 +1,5 @@
 
-const ticwins: [[usize; 3]; 8] = [[1, 2, 3], [1, 4, 7], [1, 5, 9], [2, 5, 8], [3, 6, 9], [3, 5, 7], [4, 5, 6], [7, 8, 9]];
+const ticwins: [[usize; 3]; 8] = [[0, 1, 2], [0, 3, 6], [0, 4, 8], [1, 4, 7], [2, 5, 8], [2, 4, 6], [3, 4, 5], [6, 7, 8]];
 
 
 pub fn lets_play(game: usize, diff: usize)
@@ -93,8 +93,31 @@ impl<'a> ticgame<'a>
         self.board[position] = &player;
     }
 
-    fn check_win(& mut self) -> (bool, &str)
+    fn check_win(& mut self, player: Piece) -> bool
     {
+        for vecs in ticwins
+            {
+                let mut in_row = 0;
+
+                for index in vecs
+                    {
+                        if self.board[index] == player
+                        {
+                            in_row += 1;
+                        }
+                    }
+                if in_row == 3
+                {
+                    true
+                }
+            }
+        false
+    }
+
+
+
+
+        /*
         let mut X = Vec::new();
         let mut O = Vec::new();
 
@@ -122,6 +145,8 @@ impl<'a> ticgame<'a>
             }
         (false, "")
     }
+    */
+
 }
 
 fn starttic()
