@@ -32,8 +32,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lib.rs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="722">
-              <caret line="117" lean-forward="true" selection-start-line="117" selection-end-line="117" />
+            <state relative-caret-position="678">
+              <caret line="123" column="5" lean-forward="true" selection-start-line="123" selection-start-column="5" selection-end-line="123" selection-end-column="5" />
+              <folding>
+                <element signature="e#1944#1945#0" expanded="true" />
+                <element signature="e#1988#1989#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -105,12 +109,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1558133405532</updated>
-      <workItem from="1558133407183" duration="338000" />
+      <workItem from="1558133407183" duration="550000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="338000" />
+    <option name="totallyTimeSpent" value="550000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -155,8 +159,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lib.rs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="722">
-          <caret line="117" lean-forward="true" selection-start-line="117" selection-end-line="117" />
+        <state relative-caret-position="678">
+          <caret line="123" column="5" lean-forward="true" selection-start-line="123" selection-start-column="5" selection-end-line="123" selection-end-column="5" />
+          <folding>
+            <element signature="e#1944#1945#0" expanded="true" />
+            <element signature="e#1988#1989#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

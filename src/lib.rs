@@ -89,8 +89,8 @@ impl<'a> ticgame<'a>
         (false, 10)
     }
 
-    fn store_move(&mut self, position:usize, ){
-        //self.board[position] =
+    fn store_move(&mut self, position:usize, player: Piece){
+        self.board[position] = &player;
     }
 
     fn check_win(& mut self) -> (bool, &str)
