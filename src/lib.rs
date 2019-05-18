@@ -116,7 +116,7 @@ impl<'a> ticgame<'a>
                     return (true, "X")
                 }
 
-                if O.contains(vecs[0]) & X.contains(vecs[1]) & X.contains(vecs[2]){
+                if O.contains(vecs[0]) & O.contains(vecs[1]) & O.contains(vecs[2]){
                     return (true, "O")
                 }
             }
