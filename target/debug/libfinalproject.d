@@ -1,1 +1,1 @@
-/Users/patricksachaj/Desktop/NUSPRING/Rust/rust_HeuristicGameTree/target/debug/libfinalproject.rlib: /Users/patricksachaj/Desktop/NUSPRING/Rust/rust_HeuristicGameTree/src/lib.rs
+/Users/rachelseng/Documents/Senior_Year_Spring/EECS396_Programming_in_Rust/hw/rust_HeuristicGameTree/target/debug/libfinalproject.rlib: /Users/rachelseng/Documents/Senior_Year_Spring/EECS396_Programming_in_Rust/hw/rust_HeuristicGameTree/src/lib.rs
