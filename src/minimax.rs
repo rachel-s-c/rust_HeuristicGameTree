@@ -1,6 +1,27 @@
 
 use std::f64::INFINITY;
 
+#[allow(unused)]
+pub trait HeuristicGameTree {
+    type Game;
+    type Move;
+    type Heuristic;
+
+    fn possible_moves(&self) -> impl Iter<Item = Move>;
+    fn heuristic(&self) -> Heuristic;
+    fn execute_move(&mut self);
+
+    fn minimax_search(&self, depth: usize, is_opponent: bool,) -> Move {
+        // Gets the possible moves (i.e. children)
+        // Makes executes each move on a copy of the game
+        // Gets the heuristic of each game copy executed on a next move
+        // by calling minimax again
+        // Returns the move corresponding with the best heuristic
+
+
+    }
+}
+
 // every position has a value and a vector of possible moves from that
 pub struct Position {
     value : f64,
@@ -14,6 +35,15 @@ impl Position{
             children: Vec::new(),
         }
     }
+    pub fn children(&mut self) -> impl Iter<Item = Position> {
+        self.children.iter()
+    }
+    pub fn heuristic(&self) -> f64 {
+        self.value
+    }
+    pub fn execute_move(&mut self) -> Self {
+
+    }
 }
 
 // supposing we pass this function a hashmap, where the key is the move, and the value is the
@@ -26,7 +56,7 @@ pub fn minimax(depth: usize, is_maximizing_player: bool, pos: Position,
     // Terminating condition. i.e
     // leaf node is reached
     if depth == h {
-        return pos;
+        return pos; //  should return heuristic, no?
     }
 
     // If current move is maximizer,
@@ -35,9 +65,10 @@ pub fn minimax(depth: usize, is_maximizing_player: bool, pos: Position,
     if is_maximizing_player{
         let mut max_eval = Position::new();
         max_eval.value = -INFINITY;
-        for child in pos.children {
+
+        for child in pos.children() { // And if there are no children? returns -infinity?
             let eval = minimax(depth+1, false, child, h, alpha, beta);
-            let eval_value = eval.value;
+            let eval_value = eval.heuristic();
             if max_eval.value < eval.value {
                 max_eval = eval;
             }

@@ -35,15 +35,15 @@ fn main() -> std::io::Result<()> {
     let mut difficulty_num = 0;
     if difficulty.contains("easy")
     {
-        difficulty_num = 1;
+        difficulty_num = 0;
     }
     else if difficulty.contains("medium")
     {
-        difficulty_num = 2;
+        difficulty_num = 1;
     }
     else if difficulty.contains("hard")
     {
-        difficulty_num = 3;
+        difficulty_num = 2;
     }
     else {
         eprintln!("Sorry, we do not offer that difficulty! BYE!");
