@@ -355,7 +355,7 @@ impl<'a> TicGame<'a>
         if self.moves == 9
         {
             self.winner = Some(Piece::Tie);
-        }
+        }GIT
     }
 
     fn check_win(& mut self, player: Piece) -> bool
@@ -363,7 +363,6 @@ impl<'a> TicGame<'a>
         for vecs in TICWINS.iter()
             {
                 let mut in_row = 0;
-
                 for index in vecs.iter()
                     {
                         if self.board[index.clone()] == &player
@@ -379,39 +378,6 @@ impl<'a> TicGame<'a>
         false
     }
 
-
-
-
-        /*
-        let mut X = Vec::new();
-        let mut O = Vec::new();
-
-        for (index, symbol) in self.board.iter().enumerate() //starts at 1
-        {
-            if symbol == &"X"
-            {
-                X.push(index);
-            }
-
-            if symbol == &"O"
-            {
-                O.push(index);
-            }
-        }
-        for vecs in TICWINS
-            {
-                if X.contains(vecs[0]) & X.contains(vecs[1]) & X.contains(vecs[2]){
-                    return (true, "X")
-                }
-
-                if O.contains(vecs[0]) & O.contains(vecs[1]) & O.contains(vecs[2]){
-                    return (true, "O")
-                }
-            }
-        (false, "")
-    }
-    */
-
 }
 
 fn starttic(difficulty: usize)
@@ -425,56 +391,49 @@ fn starttic(difficulty: usize)
         let _ = stdout().flush();
         stdin().read_line(&mut loc).expect("Did not enter a correct string");
         let mut loc = loc.split_whitespace();
-        let row = match loc.next()
-            {
-                Some(a) => a,
-                None => "", //Throw error, input wrong
-            };
-        let col = match loc.next()
-            {
-                Some(a) => a,
-                None => "", //Throw error, input wrong
-            };
-        if loc.next() == None
-        {
-            let (valid, pos) = new_game.clone().validmove(row, col.parse().unwrap()); //throw error
-            if valid
-            {
-                // pos is our move, store_move is our execute
-                new_game.store_move(pos, &Piece::X);
-                if new_game.check_win(Piece::X)
+        if loc.clone().count() == 2 {
+            let row =  loc.next().unwrap();
+            let col =  loc.next().unwrap();
+                let (valid, pos) = new_game.clone().validmove(row, col.parse().unwrap()); //throw error
+                if valid
                 {
-                    new_game.winner = Some(Piece::X);
-                }
-                let next_move = new_game.clone().minimax_search(difficulty*3,true);
-                if let Some(m) = next_move {
-                    new_game.store_move(m,&Piece::O);
-                    if new_game.check_win(Piece::O) {
-                        new_game.winner = Some(Piece::O);
+                    // pos is our move, store_move is our execute
+                    new_game.store_move(pos, &Piece::X);
+                    if new_game.check_win(Piece::X)
+                    {
+                        new_game.winner = Some(Piece::X);
                     }
+                    let next_move = new_game.clone().minimax_search(difficulty * 3, true);
+                    if let Some(m) = next_move {
+                        new_game.store_move(m, &Piece::O);
+                        if new_game.check_win(Piece::O) {
+                            new_game.winner = Some(Piece::O);
+                        }
+                    }
+                    // let mut cont = true;
+                    // for row in ROWS.iter() {
+                    //     for col in 1..3
+                    //         {
+                    //             let (valid2, pos2) = new_game.clone().validmove(*row, col);
+                    //             if valid2 & cont
+                    //             {
+                    //                 new_game.store_move(pos2, &Piece::O);
+                    //                 if new_game.check_win(Piece::O)
+                    //                 {
+                    //                     new_game.winner = Some(Piece::O);
+                    //                 }
+                    //                 cont = false;
+                    //             }
+                    //         }
+                    // }
                 }
-                // let mut cont = true;
-                // for row in ROWS.iter() {
-                //     for col in 1..3
-                //         {
-                //             let (valid2, pos2) = new_game.clone().validmove(*row, col);
-                //             if valid2 & cont
-                //             {
-                //                 new_game.store_move(pos2, &Piece::O);
-                //                 if new_game.check_win(Piece::O)
-                //                 {
-                //                     new_game.winner = Some(Piece::O);
-                //                 }
-                //                 cont = false;
-                //             }
-                //         }
-                // }
+                else {
+                    println!("That is not a valid move! Try again");
+                }
             }
+        println!("You did not input your move correctly! Try again");
         }
-       // else  throw error ASK FOR NEW INPUT
-
+    new_game.printboard();
+    println!("{} WON THE GAME!", new_game.winner.unwrap().val());
     }
-    println!("{} WON THE GAME!", new_game.winner.unwrap().val())
-
-}
 
