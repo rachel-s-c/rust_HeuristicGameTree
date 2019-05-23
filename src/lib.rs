@@ -341,8 +341,10 @@ impl<'a> TicGame<'a>
                 _ => 100,
             };
 
-            if self.board[int + col - 1] == &Piece::None {
-                return (true, int+col - 1)
+            let num = int + col - 1;
+
+            if self.board[num] == &Piece::None {
+                return (true, num)
             }
         }
 
@@ -365,7 +367,7 @@ impl<'a> TicGame<'a>
                 let mut in_row = 0;
                 for index in vecs.iter()
                     {
-                        if self.board[index.clone()] == &player
+                        if self.board[*index] == &player
                         {
                             in_row += 1;
                         }
