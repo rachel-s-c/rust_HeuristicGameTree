@@ -4,14 +4,12 @@ use std::cmp::max;
 
 
 const TICWINS: [[usize; 3]; 8] = [[0, 1, 2], [0, 3, 6], [0, 4, 8], [1, 4, 7], [2, 5, 8], [2, 4, 6], [3, 4, 5], [6, 7, 8]];
-//const ROWS: [&str; 3] = ["A", "B", "C"];
-
 
 pub fn lets_play(game: usize, diff: usize)
 {
     match game
         {
-            1 => starttic(diff),
+            1 => start_tic(diff),
             2 => println!("connect4"),
             3 => println!("checkers"),
             _ => println!("error"),
@@ -303,6 +301,8 @@ impl<'a> HeuristicGameTree for TicGame<'a> {
     }
 }
 
+//------------------------------------TicGame-----------------------------------------
+
 #[derive (Clone)]
 struct TicGame<'a>
 {
@@ -313,7 +313,7 @@ struct TicGame<'a>
 
 impl<'a> TicGame<'a>
 {
-    fn new() -> Self
+   pub fn new() -> Self
     {
 
         TicGame {
@@ -360,7 +360,7 @@ impl<'a> TicGame<'a>
         }
     }
 
-    fn check_win(& mut self, player: Piece) -> bool
+    fn check_win(&mut self, player: Piece) -> bool
     {
         for vecs in TICWINS.iter()
             {
@@ -382,7 +382,7 @@ impl<'a> TicGame<'a>
 
 }
 
-fn starttic(difficulty: usize)
+fn start_tic(difficulty: usize)
 {
     let mut new_game = TicGame::new();
 
@@ -405,29 +405,13 @@ fn starttic(difficulty: usize)
                     {
                         new_game.winner = Some(Piece::X);
                     } else {
-                        let next_move = new_game.clone().minimax_search(&difficulty * 3, true);
+                        let next_move = new_game.minimax_search(difficulty * 3, true);
                         if let Some(m) = next_move {
                             new_game.store_move(m, &Piece::O);
                             if new_game.check_win(Piece::O) {
                                 new_game.winner = Some(Piece::O);
                             }
                         }
-                        // let mut cont = true;
-                        // for row in ROWS.iter() {
-                        //     for col in 1..3
-                        //         {
-                        //             let (valid2, pos2) = new_game.clone().validmove(*row, col);
-                        //             if valid2 & cont
-                        //             {
-                        //                 new_game.store_move(pos2, &Piece::O);
-                        //                 if new_game.check_win(Piece::O)
-                        //                 {
-                        //                     new_game.winner = Some(Piece::O);
-                        //                 }
-                        //                 cont = false;
-                        //             }
-                        //         }
-                        // }
                     }
                 }
                 else {
@@ -440,3 +424,4 @@ fn starttic(difficulty: usize)
     println!("{} WON THE GAME!", new_game.winner.unwrap().val());
     }
 
+//------------------------------------TicGame-----------------------------------------
