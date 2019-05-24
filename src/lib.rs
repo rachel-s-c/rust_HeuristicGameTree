@@ -494,7 +494,6 @@ impl<'a> ConGame<'a>
     }
     fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
     {
-        println!("1");
         let mut in_row = 1;
         if col != 0 {
             for i in (0..=col - 1).rev() //horizontal
@@ -507,7 +506,6 @@ impl<'a> ConGame<'a>
                     }
                 }
         }
-        println!("2");
         for i in col+1..7
             {
                 if i <= 6 {
@@ -524,7 +522,6 @@ impl<'a> ConGame<'a>
             return true;
         }
         in_row = 1;
-        println!("3");
         if row != 0 {
             for i in (0..=row - 1).rev() //vertical
                 {
@@ -536,7 +533,6 @@ impl<'a> ConGame<'a>
                     }
                 }
         }
-        println!("4");
         for i in row+1..6
             {
                 if i <= 5 {
@@ -553,7 +549,6 @@ impl<'a> ConGame<'a>
             return true;
         }
         in_row = 1;
-        println!("5");
         for i in 1..5 //l diag
             {
                 if row >= i && col >= i
@@ -571,7 +566,6 @@ impl<'a> ConGame<'a>
                         break;
                     }
             }
-        println!("6");
         for i in 1..5 //l diag
             {
                 let adj_row = row + i;
@@ -595,7 +589,6 @@ impl<'a> ConGame<'a>
             return true;
         }
         in_row = 1;
-        println!("7");
         for i in 1..5 //r diag
             {
                 if col >= i
@@ -619,7 +612,6 @@ impl<'a> ConGame<'a>
                     break;
                 }
             }
-        println!("8");
         for i in 1..5 //r diag
             {
                 if row >= i
@@ -647,7 +639,6 @@ impl<'a> ConGame<'a>
         {
             return true;
         }
-        println!("9");
 
         false
     }
