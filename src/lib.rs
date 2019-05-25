@@ -54,7 +54,7 @@ impl Piece {
         }
         if self.is_none()
         {
-            return ""
+            return " "
         }
         "Tie"
     }
@@ -464,7 +464,7 @@ impl<'a> ConGame<'a>
                  self.board[3][1].val(), self.board[4][1].val(), self.board[5][1].val(), self.board[6][1].val());
         println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][0].val(), self.board[1][0].val(), self.board[2][0].val(),
                  self.board[3][0].val(), self.board[4][0].val(), self.board[5][0].val(), self.board[6][0].val());
-        println!("_______________________");
+        println!("____________________");
     }
 
     fn validmove(self, col: usize) -> (bool, usize)
