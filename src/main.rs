@@ -1,7 +1,9 @@
 use std::io::{stdin,stdout,Write};
 use std::process;
-use finalproject::lets_play;
 
+pub mod general_game;
+pub mod tictactoe;
+pub mod connect4;
 
 fn main() -> std::io::Result<()> {
     println!("Welcome to Gamer's Paradise! What would you like to play: Tic-Tac-Toe, Connect4, or Checkers?");
@@ -46,7 +48,7 @@ fn main() -> std::io::Result<()> {
         }
     };
 
-    lets_play(game_num, difficulty_num);
+    general_game::lets_play(game_num, difficulty_num);
 
     Ok(())
 }
