@@ -96,6 +96,7 @@ pub trait HeuristicGameTree: Clone {
 
         best_move.0 // Return the move that corresponds with best heuristic
     }
+
     // Need a helper cause the client shouldn't provide alpha and beta
     // also nice because we don't have to have return valus of structs/tuples, can just do an isize
     // that corresponds to the best value for the immediately next move

@@ -17,8 +17,6 @@ pub trait HeuristicGameTree {
         // Gets the heuristic of each game copy executed on a next move
         // by calling minimax again
         // Returns the move corresponding with the best heuristic
-
-
     }
 }
 
@@ -46,6 +44,8 @@ impl Position{
     }
 }
 
+
+/*
 // supposing we pass this function a hashmap, where the key is the move, and the value is the
 // vector of all the possible next steps that can be reached from this move
 // returns the position and its score
@@ -99,3 +99,5 @@ pub fn minimax(depth: usize, is_maximizing_player: bool, pos: Position,
         return min_eval
     }
 }
+
+*/
