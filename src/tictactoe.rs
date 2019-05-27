@@ -248,7 +248,7 @@ pub fn start_tic(difficulty: usize)
     let mut new_game = TicGame::new();
 
     while new_game.winner == None {
-        println!("Where do you want to put your X? (row then column)");
+        println!("Where do you want to put your X? Input format: row(space)column e.g. A 1");
         new_game.printboard();
         let mut loc = String::new();
         let _ = stdout().flush();

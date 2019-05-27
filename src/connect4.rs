@@ -25,18 +25,24 @@ impl<'a> ConGame<'a>
     fn printboard(&mut self)
     {
         println!("1  2  3  4  5  6  7");
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][5].val(), self.board[1][5].val(), self.board[2][5].val(),
-                 self.board[3][5].val(), self.board[4][5].val(), self.board[5][5].val(), self.board[6][5].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][4].val(), self.board[1][4].val(), self.board[2][4].val(),
-                 self.board[3][4].val(), self.board[4][4].val(), self.board[5][4].val(), self.board[6][4].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][3].val(), self.board[1][3].val(), self.board[2][3].val(),
-                 self.board[3][3].val(), self.board[4][3].val(), self.board[5][3].val(), self.board[6][3].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][2].val(), self.board[1][2].val(), self.board[2][2].val(),
-                 self.board[3][2].val(), self.board[4][2].val(), self.board[5][2].val(), self.board[6][2].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][1].val(), self.board[1][1].val(), self.board[2][1].val(),
-                 self.board[3][1].val(), self.board[4][1].val(), self.board[5][1].val(), self.board[6][1].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][0].val(), self.board[1][0].val(), self.board[2][0].val(),
-                 self.board[3][0].val(), self.board[4][0].val(), self.board[5][0].val(), self.board[6][0].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][5].val(), self.board[1][5].val(),
+                 self.board[2][5].val(), self.board[3][5].val(), self.board[4][5].val(),
+                 self.board[5][5].val(), self.board[6][5].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][4].val(), self.board[1][4].val(),
+                 self.board[2][4].val(), self.board[3][4].val(), self.board[4][4].val(),
+                 self.board[5][4].val(), self.board[6][4].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][3].val(), self.board[1][3].val(),
+                 self.board[2][3].val(), self.board[3][3].val(), self.board[4][3].val(),
+                 self.board[5][3].val(), self.board[6][3].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][2].val(), self.board[1][2].val(),
+                 self.board[2][2].val(), self.board[3][2].val(), self.board[4][2].val(),
+                 self.board[5][2].val(), self.board[6][2].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][1].val(), self.board[1][1].val(),
+                 self.board[2][1].val(), self.board[3][1].val(), self.board[4][1].val(),
+                 self.board[5][1].val(), self.board[6][1].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][0].val(), self.board[1][0].val(),
+                 self.board[2][0].val(), self.board[3][0].val(), self.board[4][0].val(),
+                 self.board[5][0].val(), self.board[6][0].val());
         println!("____________________");
     }
 
