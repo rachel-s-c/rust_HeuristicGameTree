@@ -4,19 +4,19 @@ use crate::general_game::{Piece};
 //---------------------------ConnectGame----------------------------------------------
 
 #[derive (Clone)]
-struct ConGame<'a>
+struct ConGame
 {
-    board: Vec<Vec<&'a Piece>>,
+    board: Vec<Vec<Piece>>,
     winner: Option<Piece>,
     moves: usize,
 }
 
-impl<'a> ConGame<'a>
+impl ConGame
 {
     fn new() -> Self
     {
         ConGame {
-            board: vec![vec![&Piece::None; 6]; 7],
+            board: vec![vec![Piece::None; 6]; 7],
             winner: None,
             moves: 0,
         }
@@ -53,7 +53,7 @@ impl<'a> ConGame<'a>
 
             for i in 0..5
                 {
-                    if self.board[firstvec][i] == &Piece::None
+                    if self.board[firstvec][i] == Piece::None
                     {
                         return (true, i)
                     }
@@ -62,7 +62,7 @@ impl<'a> ConGame<'a>
         (false, 10)
     }
 
-    fn store_move(&mut self, col: usize, row: usize, player: &'a Piece) {
+    fn store_move(&mut self, col: usize, row: usize, player: Piece) {
         println!("{} {}", col, row);
         self.board[col][row] = player;
         self.moves += 1;
@@ -77,7 +77,7 @@ impl<'a> ConGame<'a>
         if col != 0 {
             for i in (0..=col - 1).rev() //horizontal
                 {
-                    if self.board[i][row] == &player
+                    if self.board[i][row] == player
                     {
                         in_row += 1;
                     } else {
@@ -88,7 +88,7 @@ impl<'a> ConGame<'a>
         for i in col+1..7
             {
                 if i <= 6 {
-                    if self.board[i][row] == &player
+                    if self.board[i][row] == player
                     {
                         in_row += 1;
                     } else {
@@ -104,7 +104,7 @@ impl<'a> ConGame<'a>
         if row != 0 {
             for i in (0..=row - 1).rev() //vertical
                 {
-                    if self.board[col][i] == &player
+                    if self.board[col][i] == player
                     {
                         in_row += 1;
                     } else {
@@ -115,7 +115,7 @@ impl<'a> ConGame<'a>
         for i in row+1..6
             {
                 if i <= 5 {
-                    if self.board[col][i] == &player
+                    if self.board[col][i] == player
                     {
                         in_row += 1;
                     } else {
@@ -134,7 +134,7 @@ impl<'a> ConGame<'a>
                 {
                     let adj_row = row - i;
                     let adj_col = col - i;
-                    if self.board[adj_col][adj_row] == &player
+                    if self.board[adj_col][adj_row] == player
                     {
                         in_row += 1;
                     } else {
@@ -152,7 +152,7 @@ impl<'a> ConGame<'a>
 
                 if adj_col <= 6 && adj_row <= 5
                 {
-                    if self.board[adj_col][adj_row] == &player
+                    if self.board[adj_col][adj_row] == player
                     {
                         in_row += 1;
                     } else {
@@ -177,7 +177,7 @@ impl<'a> ConGame<'a>
 
                     if adj_row <= 5
                     {
-                        if self.board[adj_col][adj_row] == &player
+                        if self.board[adj_col][adj_row] == player
                         {
                             in_row += 1;
                         } else {
@@ -200,7 +200,7 @@ impl<'a> ConGame<'a>
 
                     if adj_col <= 6
                     {
-                        if self.board[adj_col][adj_row] == &player
+                        if self.board[adj_col][adj_row] == player
                         {
                             in_row += 1;
                         } else {
@@ -240,7 +240,7 @@ pub fn start_con(difficulty: usize)
             if valid
             {
                 // pos is our move, store_move is our execute
-                new_game.store_move(col-1, row, &Piece::X);
+                new_game.store_move(col-1, row, Piece::X);
                 if new_game.check_win(col-1, row, Piece::X)
                 {
                     new_game.winner = Some(Piece::X);
@@ -253,7 +253,7 @@ pub fn start_con(difficulty: usize)
                              new_game.winner = Some(Piece::O);
                          }
                      } */
-                    new_game.store_move(0, 0, &Piece::O);
+                    new_game.store_move(0, 0, Piece::O);
                     if new_game.check_win(0, 0, Piece::O) {
                         new_game.winner = Some(Piece::O);
                     }
@@ -289,7 +289,7 @@ mod con_tests {
     fn store_con_test()
     {
         let mut con_1 = ConGame::new();
-        con_1.store_move(5, 1, &Piece::X);
+        con_1.store_move(5, 1, Piece::X);
         assert_eq!(con_1.board[5][1], &Piece::X);
     }
 
@@ -297,7 +297,7 @@ mod con_tests {
     fn val_x_con_test()
     {
         let mut con_1 = ConGame::new();
-        con_1.store_move(5, 1, &Piece::X);
+        con_1.store_move(5, 1, Piece::X);
         assert_eq!(con_1.board[5][1].val(), "X");
     }
 
@@ -330,7 +330,7 @@ mod con_tests {
     {
         let mut con_1 = ConGame::new();
         con_1.moves += 41;
-        con_1.store_move(5, 1, &Piece::X);
+        con_1.store_move(5, 1, Piece::X);
         assert_eq!(con_1.winner.unwrap(), Piece::Tie);
     }
 
@@ -346,10 +346,10 @@ mod con_tests {
     fn win_vert_con_test()
     {
         let mut con_1 = ConGame::new();
-        con_1.store_move(1, 1,  &Piece::X);
-        con_1.store_move(1, 2,  &Piece::X);
-        con_1.store_move(1, 3, &Piece::X);
-        con_1.store_move(1, 4, &Piece::X);
+        con_1.store_move(1, 1,  Piece::X);
+        con_1.store_move(1, 2,  Piece::X);
+        con_1.store_move(1, 3, Piece::X);
+        con_1.store_move(1, 4, Piece::X);
         let a = con_1.check_win(1, 4, Piece::X);
         assert!(a);
     }
@@ -358,10 +358,10 @@ mod con_tests {
     fn win_horiz_con_test()
     {
         let mut con_1 = ConGame::new();
-        con_1.store_move(1, 1,  &Piece::X);
-        con_1.store_move(2, 1,  &Piece::X);
-        con_1.store_move(3, 1, &Piece::X);
-        con_1.store_move(4, 1, &Piece::X);
+        con_1.store_move(1, 1,  Piece::X);
+        con_1.store_move(2, 1,  Piece::X);
+        con_1.store_move(3, 1, Piece::X);
+        con_1.store_move(4, 1, Piece::X);
         let a = con_1.check_win(4, 1, Piece::X);
         assert!(a);
     }
