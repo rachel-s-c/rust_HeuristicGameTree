@@ -41,7 +41,7 @@ impl Piece {
         }
         else {false}
     }
-    pub fn print_piece(&self) -> &str
+    pub fn print_piece<'a>(&self) -> &'a str
     {
         if self.is_x()
         {
@@ -144,3 +144,56 @@ pub trait HeuristicGameTree: Clone {
     }
 }
 
+#[cfg(test)]
+mod gen_game_tests {
+    use super::Piece;
+
+    #[test]
+    fn x_check()
+    {
+        let x = Piece::X;
+        assert!(x.is_x());
+    }
+
+    #[test]
+    fn O_check()
+    {
+        let o = Piece::O;
+        assert!(o.is_o());
+    }
+
+    #[test]
+    fn none_check()
+    {
+        let o = Piece::None;
+        assert!(o.is_none());
+    }
+
+    #[test]
+    fn x_printcheck()
+    {
+        let x = Piece::X;
+        assert_eq!(x.print_piece(), "X");
+    }
+
+    #[test]
+    fn O_printcheck()
+    {
+        let o = Piece::O;
+        assert_eq!(o.print_piece(), "O");
+    }
+
+    #[test]
+    fn none_printcheck()
+    {
+        let o = Piece::None;
+        assert_eq!(o.print_piece(), " ");
+    }
+
+    #[test]
+    fn tie_printcheck()
+    {
+        let o = Piece::Tie;
+        assert_eq!(o.print_piece(), "Tie");
+    }
+}
