@@ -343,7 +343,7 @@ mod con_tests {
     }
 
     #[test]
-    fn win_con_test()
+    fn win_vert_con_test()
     {
         let mut con_1 = ConGame::new();
         con_1.store_move(1, 1,  &Piece::X);
@@ -351,6 +351,18 @@ mod con_tests {
         con_1.store_move(1, 3, &Piece::X);
         con_1.store_move(1, 4, &Piece::X);
         let a = con_1.check_win(1, 4, Piece::X);
+        assert!(a);
+    }
+
+    #[test]
+    fn win_horiz_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        con_1.store_move(1, 1,  &Piece::X);
+        con_1.store_move(2, 1,  &Piece::X);
+        con_1.store_move(3, 1, &Piece::X);
+        con_1.store_move(4, 1, &Piece::X);
+        let a = con_1.check_win(4, 1, Piece::X);
         assert!(a);
     }
 }
