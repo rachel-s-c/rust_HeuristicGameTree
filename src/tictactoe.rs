@@ -288,3 +288,92 @@ pub fn start_tic(difficulty: usize)
 }
 
 //------------------------------------TicGame-----------------------------------------
+
+#[cfg(test)]
+mod tic_tests {
+    use super::TicGame;
+    use super::Piece;
+
+    #[test]
+    fn new_tic_test()
+    {
+        let tic_1 = TicGame::new();
+        assert_eq!(tic_1.moves, 0);
+    }
+
+    #[test]
+    fn store_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(5, &Piece::X);
+        assert_eq!(tic_1.board[5], &Piece::X);
+    }
+
+    #[test]
+    fn val_x_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(5, &Piece::X);
+        assert_eq!(tic_1.board[5].val(), "X");
+    }
+
+    #[test]
+    fn val_o_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(5, &Piece::O);
+        assert_eq!(tic_1.board[5].val(), "O");
+    }
+
+    #[test]
+    fn val_empty_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(5, &Piece::X);
+        assert_eq!(tic_1.board[6].val(), " ");
+    }
+
+    #[test]
+    fn tie_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.moves += 8;
+        tic_1.store_move(5, &Piece::X);
+        assert_eq!(tic_1.winner.unwrap(), Piece::Tie);
+    }
+
+    #[test]
+    fn valid_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        let (a, b) = tic_1.validmove("A", 2);
+        assert!(a);
+    }
+
+    #[test]
+    fn invalid_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        let (a, b) = tic_1.validmove("D", 2);
+        assert!(!a);
+    }
+
+    #[test]
+    fn lose_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        let a = tic_1.check_win(Piece::X);
+        assert!(!a);
+    }
+
+    #[test]
+    fn win_tic_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(0, &Piece::X);
+        tic_1.store_move(1, &Piece::X);
+        tic_1.store_move(2, &Piece::X);
+        let a = tic_1.check_win(Piece::X);
+        assert!(a);
+    }
+}

@@ -272,3 +272,85 @@ pub fn start_con(difficulty: usize)
 }
 
 //---------------------------ConnectGame----------------------------------------------
+
+#[cfg(test)]
+mod con_tests {
+    use super::Piece;
+    use super::ConGame;
+
+    #[test]
+    fn new_con_test()
+    {
+        let con_1 = ConGame::new();
+        assert_eq!(con_1.moves, 0);
+    }
+
+    #[test]
+    fn store_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        con_1.store_move(5, 1, &Piece::X);
+        assert_eq!(con_1.board[5][1], &Piece::X);
+    }
+
+    #[test]
+    fn val_x_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        con_1.store_move(5, 1, &Piece::X);
+        assert_eq!(con_1.board[5][1].val(), "X");
+    }
+
+    #[test]
+    fn valid_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        let (a, b) = con_1.validmove(5);
+        assert!(a);
+    }
+
+    #[test]
+    fn validrow_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        let (a, b) = con_1.validmove(5);
+        assert_eq!(b, 0);
+    }
+
+    #[test]
+    fn invalid_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        let (a, b) = con_1.validmove(8);
+        assert!(!a);
+    }
+
+    #[test]
+    fn tie_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        con_1.moves += 41;
+        con_1.store_move(5, 1, &Piece::X);
+        assert_eq!(con_1.winner.unwrap(), Piece::Tie);
+    }
+
+    #[test]
+    fn lose_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        let a = con_1.check_win(5, 1, Piece::X);
+        assert!(!a);
+    }
+
+    #[test]
+    fn win_con_test()
+    {
+        let mut con_1 = ConGame::new();
+        con_1.store_move(1, 1,  &Piece::X);
+        con_1.store_move(1, 2,  &Piece::X);
+        con_1.store_move(1, 3, &Piece::X);
+        con_1.store_move(1, 4, &Piece::X);
+        let a = con_1.check_win(1, 4, Piece::X);
+        assert!(a);
+    }
+}

@@ -14,7 +14,7 @@ pub fn lets_play(game: usize, diff: usize)
             _ => println!("error"),
         }
 }
-#[derive (PartialEq, Clone)]
+#[derive (PartialEq, Clone, Debug)]
 pub enum Piece {
     X,
     O,
