@@ -41,7 +41,7 @@ impl Piece {
         }
         else {false}
     }
-    pub fn val(&self) -> &str
+    pub fn print_piece(&self) -> &str
     {
         if self.is_x()
         {

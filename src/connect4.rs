@@ -25,24 +25,24 @@ impl ConGame
     fn printboard(&mut self)
     {
         println!("1  2  3  4  5  6  7");
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][5].val(), self.board[1][5].val(),
-                 self.board[2][5].val(), self.board[3][5].val(), self.board[4][5].val(),
-                 self.board[5][5].val(), self.board[6][5].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][4].val(), self.board[1][4].val(),
-                 self.board[2][4].val(), self.board[3][4].val(), self.board[4][4].val(),
-                 self.board[5][4].val(), self.board[6][4].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][3].val(), self.board[1][3].val(),
-                 self.board[2][3].val(), self.board[3][3].val(), self.board[4][3].val(),
-                 self.board[5][3].val(), self.board[6][3].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][2].val(), self.board[1][2].val(),
-                 self.board[2][2].val(), self.board[3][2].val(), self.board[4][2].val(),
-                 self.board[5][2].val(), self.board[6][2].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][1].val(), self.board[1][1].val(),
-                 self.board[2][1].val(), self.board[3][1].val(), self.board[4][1].val(),
-                 self.board[5][1].val(), self.board[6][1].val());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][0].val(), self.board[1][0].val(),
-                 self.board[2][0].val(), self.board[3][0].val(), self.board[4][0].val(),
-                 self.board[5][0].val(), self.board[6][0].val());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][5].print_piece(), self.board[1][5].print_piece(),
+                 self.board[2][5].print_piece(), self.board[3][5].print_piece(), self.board[4][5].print_piece(),
+                 self.board[5][5].print_piece(), self.board[6][5].print_piece());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][4].print_piece(), self.board[1][4].print_piece(),
+                 self.board[2][4].print_piece(), self.board[3][4].print_piece(), self.board[4][4].print_piece(),
+                 self.board[5][4].print_piece(), self.board[6][4].print_piece());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][3].print_piece(), self.board[1][3].print_piece(),
+                 self.board[2][3].print_piece(), self.board[3][3].print_piece(), self.board[4][3].print_piece(),
+                 self.board[5][3].print_piece(), self.board[6][3].print_piece());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][2].print_piece(), self.board[1][2].print_piece(),
+                 self.board[2][2].print_piece(), self.board[3][2].print_piece(), self.board[4][2].print_piece(),
+                 self.board[5][2].print_piece(), self.board[6][2].print_piece());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][1].print_piece(), self.board[1][1].print_piece(),
+                 self.board[2][1].print_piece(), self.board[3][1].print_piece(), self.board[4][1].print_piece(),
+                 self.board[5][1].print_piece(), self.board[6][1].print_piece());
+        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][0].print_piece(), self.board[1][0].print_piece(),
+                 self.board[2][0].print_piece(), self.board[3][0].print_piece(), self.board[4][0].print_piece(),
+                 self.board[5][0].print_piece(), self.board[6][0].print_piece());
         println!("____________________");
     }
 
@@ -268,7 +268,7 @@ pub fn start_con(difficulty: usize)
         }
     }
     new_game.printboard();
-    println!("{} WON THE GAME!", new_game.winner.unwrap().val());
+    println!("{} WON THE GAME!", new_game.winner.unwrap().print_piece());
 }
 
 //---------------------------ConnectGame----------------------------------------------
@@ -294,11 +294,11 @@ mod con_tests {
     }
 
     #[test]
-    fn val_x_con_test()
+    fn print_piece_x_con_test()
     {
         let mut con_1 = ConGame::new();
         con_1.store_move(5, 1, Piece::X);
-        assert_eq!(con_1.board[5][1].val(), "X");
+        assert_eq!(con_1.board[5][1].print_piece(), "X");
     }
 
     #[test]

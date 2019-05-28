@@ -187,9 +187,9 @@ impl<'a> TicGame
     fn printboard(& mut self)
     {
         println!("  1  2  3");
-        println!("A {}  {}  {}", self.board[0].val(), self.board[1].val(), self.board[2].val());
-        println!("B {}  {}  {}", self.board[3].val(), self.board[4].val(), self.board[5].val());
-        println!("C {}  {}  {}", self.board[6].val(), self.board[7].val(), self.board[8].val());
+        println!("A {}  {}  {}", self.board[0].print_piece(), self.board[1].print_piece(), self.board[2].print_piece());
+        println!("B {}  {}  {}", self.board[3].print_piece(), self.board[4].print_piece(), self.board[5].print_piece());
+        println!("C {}  {}  {}", self.board[6].print_piece(), self.board[7].print_piece(), self.board[8].print_piece());
     }
 
     fn validmove(self, row: &'a str, col: usize) -> (bool, usize)
@@ -284,7 +284,7 @@ pub fn start_tic(difficulty: usize)
         }
     }
     new_game.printboard();
-    println!("{} WON THE GAME!", new_game.winner.unwrap().val());
+    println!("{} WON THE GAME!", new_game.winner.unwrap().print_piece());
 }
 
 //------------------------------------TicGame-----------------------------------------
@@ -310,27 +310,27 @@ mod tic_tests {
     }
 
     #[test]
-    fn val_x_tic_test()
+    fn print_piece_x_tic_test()
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
-        assert_eq!(tic_1.board[5].val(), "X");
+        assert_eq!(tic_1.board[5].print_piece(), "X");
     }
 
     #[test]
-    fn val_o_tic_test()
+    fn print_piece_o_tic_test()
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::O);
-        assert_eq!(tic_1.board[5].val(), "O");
+        assert_eq!(tic_1.board[5].print_piece(), "O");
     }
 
     #[test]
-    fn val_empty_tic_test()
+    fn print_piece_empty_tic_test()
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
-        assert_eq!(tic_1.board[6].val(), " ");
+        assert_eq!(tic_1.board[6].print_piece(), " ");
     }
 
     #[test]
