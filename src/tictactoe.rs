@@ -306,7 +306,7 @@ mod tic_tests {
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
-        assert_eq!(tic_1.board[5], &Piece::X);
+        assert_eq!(tic_1.board[5], Piece::X);
     }
 
     #[test]

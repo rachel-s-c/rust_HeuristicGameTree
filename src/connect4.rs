@@ -290,7 +290,7 @@ mod con_tests {
     {
         let mut con_1 = ConGame::new();
         con_1.store_move(5, 1, Piece::X);
-        assert_eq!(con_1.board[5][1], &Piece::X);
+        assert_eq!(con_1.board[5][1], Piece::X);
     }
 
     #[test]
