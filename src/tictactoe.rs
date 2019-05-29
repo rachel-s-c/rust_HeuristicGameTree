@@ -167,7 +167,7 @@ impl<'a> HeuristicGameTree for TicGame {
 #[derive (Clone)]
 struct TicGame
 {
-    board: Vec<Piece>,
+    board: [Piece; 9],
     winner: Option<Piece>,
     moves: usize,
 }
@@ -178,7 +178,7 @@ impl<'a> TicGame
     {
 
         TicGame {
-            board: vec![Piece::None; 9],
+            board: [Piece::None; 9],
             winner: None,
             moves: 0,
         }

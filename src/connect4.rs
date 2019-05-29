@@ -6,7 +6,7 @@ use crate::general_game::{Piece};
 #[derive (Clone)]
 struct ConGame
 {
-    board: Vec<Vec<Piece>>,
+    board: [[Piece; 6]; 7],
     winner: Option<Piece>,
     moves: usize,
 }
@@ -16,7 +16,7 @@ impl ConGame
     fn new() -> Self
     {
         ConGame {
-            board: vec![vec![Piece::None; 6]; 7],
+            board: [[Piece::None; 6]; 7],
             winner: None,
             moves: 0,
         }
