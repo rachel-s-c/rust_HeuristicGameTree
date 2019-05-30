@@ -350,6 +350,14 @@ mod tic_tests {
     }
 
     #[test]
+    fn move_count_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(5, Piece::X);
+        assert_eq!(tic_1.move_count(), 1);
+    }
+
+    #[test]
     fn tie_tic_test()
     {
         let mut tic_1 = TicGame::new();
