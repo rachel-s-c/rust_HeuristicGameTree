@@ -1,12 +1,12 @@
 use std::io::{stdin,stdout,Write};
 use crate::general_game::{Piece};
-
+use crate::general_game::print_piece;
 //---------------------------ConnectGame----------------------------------------------
 
 #[derive (Clone)]
 struct ConGame
 {
-    board: [[Piece; 6]; 7],
+    board: [[Option<Piece>; 6]; 7],
     winner: Option<Piece>,
     moves: usize,
 }
@@ -16,7 +16,7 @@ impl ConGame
     fn new() -> Self
     {
         ConGame {
-            board: [[Piece::None; 6]; 7],
+            board: [[None; 6]; 7],
             winner: None,
             moves: 0,
         }
@@ -25,24 +25,24 @@ impl ConGame
     fn printboard(&mut self)
     {
         println!("1  2  3  4  5  6  7");
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][5].print_piece(), self.board[1][5].print_piece(),
-                 self.board[2][5].print_piece(), self.board[3][5].print_piece(), self.board[4][5].print_piece(),
-                 self.board[5][5].print_piece(), self.board[6][5].print_piece());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][4].print_piece(), self.board[1][4].print_piece(),
-                 self.board[2][4].print_piece(), self.board[3][4].print_piece(), self.board[4][4].print_piece(),
-                 self.board[5][4].print_piece(), self.board[6][4].print_piece());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][3].print_piece(), self.board[1][3].print_piece(),
-                 self.board[2][3].print_piece(), self.board[3][3].print_piece(), self.board[4][3].print_piece(),
-                 self.board[5][3].print_piece(), self.board[6][3].print_piece());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][2].print_piece(), self.board[1][2].print_piece(),
-                 self.board[2][2].print_piece(), self.board[3][2].print_piece(), self.board[4][2].print_piece(),
-                 self.board[5][2].print_piece(), self.board[6][2].print_piece());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][1].print_piece(), self.board[1][1].print_piece(),
-                 self.board[2][1].print_piece(), self.board[3][1].print_piece(), self.board[4][1].print_piece(),
-                 self.board[5][1].print_piece(), self.board[6][1].print_piece());
-        println!("{}  {}  {}  {}  {}  {}  {}", self.board[0][0].print_piece(), self.board[1][0].print_piece(),
-                 self.board[2][0].print_piece(), self.board[3][0].print_piece(), self.board[4][0].print_piece(),
-                 self.board[5][0].print_piece(), self.board[6][0].print_piece());
+        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][5]), print_piece(self.board[1][5]),
+                 print_piece(self.board[2][5]), print_piece(self.board[3][5]), print_piece(self.board[4][5]),
+                 print_piece(self.board[5][5]), print_piece(self.board[6][5]));
+        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][4]), print_piece(self.board[1][4]),
+                 print_piece(self.board[2][4]), print_piece(self.board[3][4]), print_piece(self.board[4][4]),
+                 print_piece(self.board[5][4]), print_piece(self.board[6][4]));
+        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][3]), print_piece(self.board[1][3]),
+                 print_piece(self.board[2][3]), print_piece(self.board[3][3]), print_piece(self.board[4][3]),
+                 print_piece(self.board[5][3]), print_piece(self.board[6][3]));
+        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][2]), print_piece(self.board[1][2]),
+                 print_piece(self.board[2][2]), print_piece(self.board[3][2]), print_piece(self.board[4][2]),
+                 print_piece(self.board[5][2]), print_piece(self.board[6][2]));
+        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][1]), print_piece(self.board[1][1]),
+                 print_piece(self.board[2][1]), print_piece(self.board[3][1]), print_piece(self.board[4][1]),
+                 print_piece(self.board[5][1]), print_piece(self.board[6][1]));
+        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][0]), print_piece(self.board[1][0]),
+                 print_piece(self.board[2][0]), print_piece(self.board[3][0]), print_piece(self.board[4][0]),
+                 print_piece(self.board[5][0]), print_piece(self.board[6][0]));
         println!("____________________");
     }
 
@@ -53,7 +53,7 @@ impl ConGame
 
             for i in 0..5
                 {
-                    if self.board[firstvec][i] == Piece::None
+                    if self.board[firstvec][i].is_none()
                     {
                         return (true, i)
                     }
@@ -64,7 +64,7 @@ impl ConGame
 
     fn store_move(&mut self, col: usize, row: usize, player: Piece) {
         println!("{} {}", col, row);
-        self.board[col][row] = player;
+        self.board[col][row] = Some(player);
         self.moves += 1;
         if self.moves == 42
         {
@@ -77,7 +77,7 @@ impl ConGame
         if col != 0 {
             for i in (0..=col - 1).rev() //horizontal
                 {
-                    if self.board[i][row] == player
+                    if self.board[i][row] == Some(player)
                     {
                         in_row += 1;
                     } else {
@@ -88,7 +88,7 @@ impl ConGame
         for i in col+1..7
             {
                 if i <= 6 {
-                    if self.board[i][row] == player
+                    if self.board[i][row] == Some(player)
                     {
                         in_row += 1;
                     } else {
@@ -104,7 +104,7 @@ impl ConGame
         if row != 0 {
             for i in (0..=row - 1).rev() //vertical
                 {
-                    if self.board[col][i] == player
+                    if self.board[col][i] == Some(player)
                     {
                         in_row += 1;
                     } else {
@@ -115,7 +115,7 @@ impl ConGame
         for i in row+1..6
             {
                 if i <= 5 {
-                    if self.board[col][i] == player
+                    if self.board[col][i] == Some(player)
                     {
                         in_row += 1;
                     } else {
@@ -134,7 +134,7 @@ impl ConGame
                 {
                     let adj_row = row - i;
                     let adj_col = col - i;
-                    if self.board[adj_col][adj_row] == player
+                    if self.board[adj_col][adj_row] == Some(player)
                     {
                         in_row += 1;
                     } else {
@@ -152,7 +152,7 @@ impl ConGame
 
                 if adj_col <= 6 && adj_row <= 5
                 {
-                    if self.board[adj_col][adj_row] == player
+                    if self.board[adj_col][adj_row] == Some(player)
                     {
                         in_row += 1;
                     } else {
@@ -177,7 +177,7 @@ impl ConGame
 
                     if adj_row <= 5
                     {
-                        if self.board[adj_col][adj_row] == player
+                        if self.board[adj_col][adj_row] == Some(player)
                         {
                             in_row += 1;
                         } else {
@@ -200,7 +200,7 @@ impl ConGame
 
                     if adj_col <= 6
                     {
-                        if self.board[adj_col][adj_row] == player
+                        if self.board[adj_col][adj_row] == Some(player)
                         {
                             in_row += 1;
                         } else {
@@ -268,7 +268,7 @@ pub fn start_con(difficulty: usize)
         }
     }
     new_game.printboard();
-    println!("{} WON THE GAME!", new_game.winner.unwrap().print_piece());
+    println!("{} WON THE GAME!", print_piece(new_game.winner));
 }
 
 //---------------------------ConnectGame----------------------------------------------
@@ -277,6 +277,7 @@ pub fn start_con(difficulty: usize)
 mod con_tests {
     use super::Piece;
     use super::ConGame;
+    use super::print_piece;
 
     #[test]
     fn new_con_test()
@@ -298,7 +299,7 @@ mod con_tests {
     {
         let mut con_1 = ConGame::new();
         con_1.store_move(5, 1, Piece::X);
-        assert_eq!(con_1.board[5][1].print_piece(), "X");
+        assert_eq!(print_piece(con_1.board[5][1]), "X");
     }
 
     #[test]

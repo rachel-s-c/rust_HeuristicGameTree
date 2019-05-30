@@ -18,7 +18,6 @@ pub fn lets_play(game: usize, diff: usize)
 pub enum Piece {
     X,
     O,
-    None,
     Tie
 }
 
@@ -35,28 +34,24 @@ impl Piece {
         }
         else {false}
     }
-    fn is_none(&self) -> bool {
-        if let Piece::None = self {
-            true
-        }
-        else {false}
-    }
-    pub fn print_piece<'a>(&self) -> &'a str
+}
+
+pub fn print_piece<'a>(item: Option<Piece>) -> &'a str
+{
+    if item.is_none()
     {
-        if self.is_x()
-        {
-            return "X"
-        }
-        if self.is_o()
-        {
-            return "O"
-        }
-        if self.is_none()
-        {
-            return " "
-        }
-        "Tie"
+        return " "
     }
+    if item.unwrap().is_x()
+    {
+        return "X"
+    }
+    if item.unwrap().is_o()
+    {
+        return "O"
+    }
+
+    "Tie"
 }
 
 #[allow(unused)]
@@ -147,6 +142,7 @@ pub trait HeuristicGameTree: Clone {
 #[cfg(test)]
 mod gen_game_tests {
     use super::Piece;
+    use super::print_piece;
 
     #[test]
     fn x_check()
@@ -162,38 +158,26 @@ mod gen_game_tests {
         assert!(o.is_o());
     }
 
-    #[test]
-    fn none_check()
-    {
-        let o = Piece::None;
-        assert!(o.is_none());
-    }
 
     #[test]
     fn x_printcheck()
     {
         let x = Piece::X;
-        assert_eq!(x.print_piece(), "X");
+        assert_eq!(print_piece(Some(x)), "X");
     }
 
     #[test]
     fn O_printcheck()
     {
         let o = Piece::O;
-        assert_eq!(o.print_piece(), "O");
+        assert_eq!(print_piece(Some(o)), "O");
     }
 
-    #[test]
-    fn none_printcheck()
-    {
-        let o = Piece::None;
-        assert_eq!(o.print_piece(), " ");
-    }
 
     #[test]
     fn tie_printcheck()
     {
         let o = Piece::Tie;
-        assert_eq!(o.print_piece(), "Tie");
+        assert_eq!(print_piece(Some(o)), "Tie");
     }
 }

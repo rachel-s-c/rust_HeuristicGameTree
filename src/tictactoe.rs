@@ -1,6 +1,7 @@
 use std::io::{stdin,stdout,Write};
 use std::cmp::max;
 use crate::general_game::{HeuristicGameTree, Piece};
+use crate::general_game::print_piece;
 
 const TICWINS: [[usize; 3]; 8] = [[0, 1, 2], [0, 3, 6], [0, 4, 8], [1, 4, 7], [2, 5, 8],
     [2, 4, 6], [3, 4, 5], [6, 7, 8]];
@@ -11,7 +12,7 @@ impl<'a> HeuristicGameTree for TicGame {
     fn possible_moves(&mut self) -> Vec<Self::Move> {
         let mut list = Vec::new();
         for i in 0..9 {
-            if self.board[i] == Piece::None {
+            if self.board[i].is_none() {
                 list.push(i);
             }
         }
@@ -25,10 +26,10 @@ impl<'a> HeuristicGameTree for TicGame {
         let mut x_streak = if self.moves > 0 {1} else {0};
         let mut o_streak = if self.moves > 1 {1} else {0};
         // First check for wins
-        if self.board[4] != Piece::None {
+        if self.board[4].is_some() {
             let center = self.board[4].clone();
             if center == self.board[0] && center == self.board[8] {
-                if center == Piece::X {
+                if center == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -36,7 +37,7 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
             if center == self.board[1] && center == self.board[7] {
-                if center == Piece::X {
+                if center == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -44,7 +45,7 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
             if center == self.board[2] && center == self.board[6] {
-                if center == Piece::X {
+                if center == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -52,7 +53,7 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
             if center == self.board[3] && center == self.board[5] {
-                if center == Piece::X {
+                if center == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -60,10 +61,10 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
         }
-        if self.board[0] != Piece::None {
+        if self.board[0].is_some() {
             let corner = self.board[0].clone();
             if corner == self.board[1] && corner == self.board[2] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -71,7 +72,7 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
             if corner == self.board[3] && corner == self.board[6] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -79,10 +80,10 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
         }
-        if self.board[8] != Piece::None {
+        if self.board[8].is_some() {
             let corner = self.board[8].clone();
             if corner == self.board[5] && corner == self.board[2] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -90,7 +91,7 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
             if corner == self.board[7] && corner == self.board[6] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = 3;
                 }
                 else {
@@ -99,11 +100,11 @@ impl<'a> HeuristicGameTree for TicGame {
             }
         }
         // Do pairs
-        if self.board[4] != Piece::None {
+        if self.board[4].is_some() {
             let center = self.board[4].clone();
             for i in 0..9 {
                 if i != 4 && center == self.board[i] { // found a pair
-                    if center == Piece::X {
+                    if center == Some(Piece::X) {
                         x_streak = max(x_streak,2);
                     }
                     else {
@@ -113,9 +114,9 @@ impl<'a> HeuristicGameTree for TicGame {
             }
         }
         let corner = self.board[0].clone();
-        if self.board[0] != Piece::None {
+        if self.board[0].is_some() {
             if corner == self.board[1] || corner == self.board[3] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
                 }
                 else {
@@ -123,10 +124,10 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
         }
-        if self.board[2] != Piece::None {
+        if self.board[2].is_some() {
            // let corner = self.board[0].clone();
             if corner == self.board[1] || corner == self.board[5] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
                 }
                 else {
@@ -134,10 +135,10 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
         }
-        if self.board[6] != Piece::None {
+        if self.board[6].is_some() {
           //  let corner = self.board[0].clone();
             if corner == self.board[7] || corner == self.board[3] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
                 }
                 else {
@@ -145,10 +146,10 @@ impl<'a> HeuristicGameTree for TicGame {
                 }
             }
         }
-        if self.board[8] != Piece::None {
+        if self.board[8].is_some() {
           //  let corner = self.board[0].clone();
             if corner == self.board[7] || corner == self.board[5] {
-                if corner == Piece::X {
+                if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
                 }
                 else {
@@ -167,7 +168,7 @@ impl<'a> HeuristicGameTree for TicGame {
 #[derive (Clone)]
 struct TicGame
 {
-    board: [Piece; 9],
+    board: [Option<Piece>; 9],
     winner: Option<Piece>,
     moves: usize,
 }
@@ -178,7 +179,7 @@ impl<'a> TicGame
     {
 
         TicGame {
-            board: [Piece::None; 9],
+            board: [None; 9],
             winner: None,
             moves: 0,
         }
@@ -187,9 +188,9 @@ impl<'a> TicGame
     fn printboard(& mut self)
     {
         println!("  1  2  3");
-        println!("A {}  {}  {}", self.board[0].print_piece(), self.board[1].print_piece(), self.board[2].print_piece());
-        println!("B {}  {}  {}", self.board[3].print_piece(), self.board[4].print_piece(), self.board[5].print_piece());
-        println!("C {}  {}  {}", self.board[6].print_piece(), self.board[7].print_piece(), self.board[8].print_piece());
+        println!("A {}  {}  {}", print_piece(self.board[0]), print_piece(self.board[1]), print_piece(self.board[2]));
+        println!("B {}  {}  {}", print_piece(self.board[3]), print_piece(self.board[4]), print_piece(self.board[5]));
+        println!("C {}  {}  {}", print_piece(self.board[6]), print_piece(self.board[7]), print_piece(self.board[8]));
     }
 
     fn validmove(self, row: &'a str, col: usize) -> (bool, usize)
@@ -204,7 +205,7 @@ impl<'a> TicGame
 
             let num = int + col - 1;
 
-            if self.board[num] == Piece::None {
+            if self.board[num].is_none() {
                 return (true, num)
             }
         }
@@ -213,7 +214,7 @@ impl<'a> TicGame
     }
 
     fn store_move(&mut self, position:usize, player: Piece){
-        self.board[position] = player;
+        self.board[position] = Some(player);
         self.moves += 1;
         if self.moves == 9
         {
@@ -228,7 +229,7 @@ impl<'a> TicGame
                 let mut in_row = 0;
                 for index in vecs.iter()
                     {
-                        if self.board[*index] == player
+                        if self.board[*index] == Some(player)
                         {
                             in_row += 1;
                         }
@@ -284,7 +285,7 @@ pub fn start_tic(difficulty: usize)
         }
     }
     new_game.printboard();
-    println!("{} WON THE GAME!", new_game.winner.unwrap().print_piece());
+    println!("{} WON THE GAME!", print_piece(new_game.winner));
 }
 
 //------------------------------------TicGame-----------------------------------------
@@ -293,6 +294,7 @@ pub fn start_tic(difficulty: usize)
 mod tic_tests {
     use super::TicGame;
     use super::Piece;
+    use super::print_piece;
 
     #[test]
     fn new_tic_test()
@@ -306,7 +308,7 @@ mod tic_tests {
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
-        assert_eq!(tic_1.board[5], Piece::X);
+        assert_eq!(tic_1.board[5].unwrap(), Piece::X);
     }
 
     #[test]
@@ -314,7 +316,7 @@ mod tic_tests {
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
-        assert_eq!(tic_1.board[5].print_piece(), "X");
+        assert_eq!(print_piece(tic_1.board[5]), "X");
     }
 
     #[test]
@@ -322,7 +324,7 @@ mod tic_tests {
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::O);
-        assert_eq!(tic_1.board[5].print_piece(), "O");
+        assert_eq!(print_piece(tic_1.board[5]), "O");
     }
 
     #[test]
@@ -330,7 +332,7 @@ mod tic_tests {
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
-        assert_eq!(tic_1.board[6].print_piece(), " ");
+        assert_eq!(print_piece(tic_1.board[6]), " ");
     }
 
     #[test]
