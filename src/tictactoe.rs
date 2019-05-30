@@ -23,8 +23,8 @@ impl<'a> HeuristicGameTree for TicGame {
         // invariant: x_streak != o_streak != 3
         // keep track of best streak by each player
         //
-        let mut x_streak = if self.moves > 0 {1} else {0};
-        let mut o_streak = if self.moves > 1 {1} else {0};
+        let mut x_streak = if self.move_count() > 0 {1} else {0};
+        let mut o_streak = if self.move_count() > 1 {1} else {0};
         // First check for wins
         if self.board[4].is_some() {
             let center = self.board[4].clone();
@@ -170,7 +170,6 @@ struct TicGame
 {
     board: [Option<Piece>; 9],
     winner: Option<Piece>,
-    moves: usize,
 }
 
 impl<'a> TicGame
@@ -181,7 +180,6 @@ impl<'a> TicGame
         TicGame {
             board: [None; 9],
             winner: None,
-            moves: 0,
         }
     }
 
@@ -215,11 +213,14 @@ impl<'a> TicGame
 
     fn store_move(&mut self, position:usize, player: Piece){
         self.board[position] = Some(player);
-        self.moves += 1;
-        if self.moves == 9
-        {
-            self.winner = Some(Piece::Tie);
-        }
+        for piec in self.board.iter()
+            {
+                if piec.is_none()
+                {
+                    return;
+                }
+            }
+        self.winner = Some(Piece::Tie);
     }
 
     fn check_win(&mut self, player: Piece) -> bool
@@ -240,6 +241,19 @@ impl<'a> TicGame
                 }
             }
         false
+    }
+
+    fn move_count(&self) -> usize
+    {
+        let mut count = 0;
+        for piec in self.board.iter()
+            {
+                if piec.is_some()
+                {
+                    count += 1;
+                }
+            }
+        count
     }
 
 }
@@ -300,7 +314,7 @@ mod tic_tests {
     fn new_tic_test()
     {
         let tic_1 = TicGame::new();
-        assert_eq!(tic_1.moves, 0);
+        assert_eq!(tic_1.board[1], None);
     }
 
     #[test]
@@ -339,8 +353,15 @@ mod tic_tests {
     fn tie_tic_test()
     {
         let mut tic_1 = TicGame::new();
-        tic_1.moves += 8;
-        tic_1.store_move(5, Piece::X);
+        tic_1.store_move(0, Piece::X);
+        tic_1.store_move(1, Piece::O);
+        tic_1.store_move(2, Piece::X);
+        tic_1.store_move(3, Piece::O);
+        tic_1.store_move(4, Piece::X);
+        tic_1.store_move(5, Piece::O);
+        tic_1.store_move(6, Piece::O);
+        tic_1.store_move(7, Piece::X);
+        tic_1.store_move(8, Piece::O);
         assert_eq!(tic_1.winner.unwrap(), Piece::Tie);
     }
 

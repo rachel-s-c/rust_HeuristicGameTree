@@ -8,7 +8,6 @@ struct ConGame
 {
     board: [[Option<Piece>; 6]; 7],
     winner: Option<Piece>,
-    moves: usize,
 }
 
 impl ConGame
@@ -18,7 +17,6 @@ impl ConGame
         ConGame {
             board: [[None; 6]; 7],
             winner: None,
-            moves: 0,
         }
     }
 
@@ -65,11 +63,16 @@ impl ConGame
     fn store_move(&mut self, col: usize, row: usize, player: Piece) {
         println!("{} {}", col, row);
         self.board[col][row] = Some(player);
-        self.moves += 1;
-        if self.moves == 42
-        {
-            self.winner = Some(Piece::Tie);
-        }
+        for pie in self.board.iter()
+            {
+                for piec in pie.iter() {
+                    if piec.is_none()
+                    {
+                        return;
+                    }
+                }
+            }
+        self.winner = Some(Piece::Tie);
     }
     fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
     {
@@ -283,7 +286,7 @@ mod con_tests {
     fn new_con_test()
     {
         let con_1 = ConGame::new();
-        assert_eq!(con_1.moves, 0);
+        assert_eq!(con_1.board[1][1], None);
     }
 
     #[test]
@@ -291,7 +294,7 @@ mod con_tests {
     {
         let mut con_1 = ConGame::new();
         con_1.store_move(5, 1, Piece::X);
-        assert_eq!(con_1.board[5][1], Piece::X);
+        assert_eq!(con_1.board[5][1].unwrap(), Piece::X);
     }
 
     #[test]
@@ -330,8 +333,13 @@ mod con_tests {
     fn tie_con_test()
     {
         let mut con_1 = ConGame::new();
-        con_1.moves += 41;
-        con_1.store_move(5, 1, Piece::X);
+        for a in 0..7
+            {
+                for b in 0..6
+                    {
+                        con_1.store_move(a, b, Piece::X);
+                    }
+            }
         assert_eq!(con_1.winner.unwrap(), Piece::Tie);
     }
 
