@@ -1,6 +1,88 @@
 use std::io::{stdin,stdout,Write};
-use crate::general_game::{Piece};
+use std::cmp::max;
+use crate::general_game::{HeuristicGameTree, Piece};
 use crate::general_game::print_piece;
+
+impl<'a> HeuristicGameTree for ConGame {
+    type Move = usize;
+    fn possible_moves(&mut self) -> Vec<Self::Move> {
+        let mut list = Vec::new();
+        for i in 0..7 {
+            if self.board[i][5].is_none() {
+                list.push(i);
+            }
+        }
+        println!("{:?}", list);
+        list
+    }
+    // MAKE THIS BETTER
+    fn heuristic(&self) -> isize {
+
+        let mut x_streak = 1;
+        let mut o_streak = 1;
+        // First check for wins
+        let mut mutableself = self.clone();
+        let (col, row) = mutableself.most_recent;
+        if mutableself.check_win(col, row, Piece::X)
+        {
+            x_streak = 4;
+        }
+        if mutableself.check_win(col, row, Piece::O)
+        {
+            o_streak = 4;
+        }
+
+        if x_streak != 4 {
+            'outer: for a in 0..6
+                {
+                    for b in 0..5
+                        {
+                            if mutableself.board[a][b] == Some(Piece::X)
+                            {
+                                let cur = mutableself.longest_row(a, b, Piece::X);
+                                x_streak = max(cur, x_streak);
+                                if x_streak == 3
+                                {
+                                    break 'outer;
+                                }
+                            }
+                        }
+                }
+        }
+
+        if o_streak != 4 {
+            'outer2: for a in 0..6
+                {
+                    for b in 0..5
+                        {
+                            if mutableself.board[a][b] == Some(Piece::O)
+                            {
+                                let cur = mutableself.longest_row(a, b, Piece::O);
+                                x_streak = max(cur, o_streak);
+                                if o_streak == 3
+                                {
+                                    break 'outer2;
+                                }
+                            }
+                        }
+                }
+        }
+
+
+        x_streak - o_streak // Why is this backwards?
+    }
+    fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool) {
+        println!("a1 - {:?}", next_move);
+        let (val, loc) = self.clone().validmove(next_move + 1);
+        println!("a - {}", loc);
+        self.store_move(next_move, loc, if is_opponent {Piece::O} else {Piece::X});
+    }
+}
+
+
+
+
+
 //---------------------------ConnectGame----------------------------------------------
 
 #[derive (Clone)]
@@ -8,6 +90,7 @@ struct ConGame
 {
     board: [[Option<Piece>; 6]; 7],
     winner: Option<Piece>,
+    most_recent: (usize, usize),
 }
 
 impl ConGame
@@ -17,6 +100,7 @@ impl ConGame
         ConGame {
             board: [[None; 6]; 7],
             winner: None,
+            most_recent: (0, 0),
         }
     }
 
@@ -49,7 +133,7 @@ impl ConGame
         if col >= 1 && col <= 7 {
             let firstvec = col - 1;
 
-            for i in 0..5
+            for i in 0..6
                 {
                     if self.board[firstvec][i].is_none()
                     {
@@ -62,6 +146,7 @@ impl ConGame
 
     fn store_move(&mut self, col: usize, row: usize, player: Piece) {
         self.board[col][row] = Some(player);
+        self.most_recent = (col, row);
     }
     fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
     {
@@ -226,6 +311,145 @@ impl ConGame
             }
         false
     }
+    fn longest_row(&mut self, col: usize, row: usize, player: Piece) -> isize
+    {
+        let mut lengths = Vec::new();
+        let mut in_row = 1;
+        if col != 0 {
+            for i in (0..=col - 1).rev() //horizontal
+                {
+                    if self.board[i][row] == Some(player)
+                    {
+                        in_row += 1;
+                    } else {
+                        break;
+                    }
+                }
+        }
+        for i in col+1..7
+            {
+                if i <= 6 {
+                    if self.board[i][row] == Some(player)
+                    {
+                        in_row += 1;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        lengths.push(in_row);
+        in_row = 1;
+        if row != 0 {
+            for i in (0..=row - 1).rev() //vertical
+                {
+                    if self.board[col][i] == Some(player)
+                    {
+                        in_row += 1;
+                    } else {
+                        break;
+                    }
+                }
+        }
+        for i in row+1..6
+            {
+                if i <= 5 {
+                    if self.board[col][i] == Some(player)
+                    {
+                        in_row += 1;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        lengths.push(in_row);
+        in_row = 1;
+        for i in 1..5 //l diag
+            {
+                if row >= i && col >= i
+                {
+                    let adj_row = row - i;
+                    let adj_col = col - i;
+                    if self.board[adj_col][adj_row] == Some(player)
+                    {
+                        in_row += 1;
+                    } else {
+                        break;
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        for i in 1..5 //l diag
+            {
+                let adj_row = row + i;
+                let adj_col = col + i;
+
+                if adj_col <= 6 && adj_row <= 5
+                {
+                    if self.board[adj_col][adj_row] == Some(player)
+                    {
+                        in_row += 1;
+                    } else {
+                        break;
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        lengths.push(in_row);
+        in_row = 1;
+        for i in 1..5 //r diag
+            {
+                if col >= i
+                {
+                    let adj_row = row + i;
+                    let adj_col = col - i;
+
+                    if adj_row <= 5
+                    {
+                        if self.board[adj_col][adj_row] == Some(player)
+                        {
+                            in_row += 1;
+                        } else {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        for i in 1..5 //r diag
+            {
+                if row >= i
+                {
+                    let adj_row = row - i;
+                    let adj_col = col + i;
+
+                    if adj_col <= 6
+                    {
+                        if self.board[adj_col][adj_row] == Some(player)
+                        {
+                            in_row += 1;
+                        } else {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        lengths.push(in_row);
+
+        *lengths.iter().max().unwrap()
+    }
 
 }
 
@@ -246,23 +470,22 @@ pub fn start_con(difficulty: usize)
             if valid
             {
                 // pos is our move, store_move is our execute
+                println!("b - {}", row);
                 new_game.store_move(col-1, row, Piece::X);
                 if new_game.check_win(col-1, row, Piece::X)
                 {
                     new_game.winner = Some(Piece::X);
                 }
                 else {
-                    /* let next_move = new_game.minimax_search(difficulty * 3, true);
+                     let next_move = new_game.minimax_search(difficulty * 3, true);
                      if let Some(m) = next_move {
-                         new_game.store_move(m, &Piece::O);
-                         if new_game.check_win(Piece::O) {
+                         let (val, loc) = new_game.clone().validmove(m + 1);
+                         println!("c - {}", loc);
+                         new_game.store_move(m, loc, Piece::O);
+                         if new_game.check_win(m, loc, Piece::O) {
                              new_game.winner = Some(Piece::O);
                          }
-                     } */
-                    new_game.store_move(0, 0, Piece::O);
-                    if new_game.check_win(0, 0, Piece::O) {
-                        new_game.winner = Some(Piece::O);
-                    }
+                     }
                 }
             }
             else {
