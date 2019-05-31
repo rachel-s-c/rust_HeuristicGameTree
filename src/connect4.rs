@@ -61,18 +61,7 @@ impl ConGame
     }
 
     fn store_move(&mut self, col: usize, row: usize, player: Piece) {
-        println!("{} {}", col, row);
         self.board[col][row] = Some(player);
-        for pie in self.board.iter()
-            {
-                for piec in pie.iter() {
-                    if piec.is_none()
-                    {
-                        return;
-                    }
-                }
-            }
-        self.winner = Some(Piece::Tie);
     }
     fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
     {
@@ -224,13 +213,27 @@ impl ConGame
 
         false
     }
+    fn board_not_full(&self) -> bool
+    {
+        for pie in self.board.iter()
+            {
+                for piec in pie.iter() {
+                    if piec.is_none()
+                    {
+                       return true
+                    }
+                }
+            }
+        false
+    }
+
 }
 
 pub fn start_con(difficulty: usize)
 {
     let mut new_game = ConGame::new();
 
-    while new_game.winner == None {
+    while new_game.winner == None && new_game.board_not_full() {
         println!("Where do you want to put your X? (Only input col)");
         new_game.printboard();
         let mut loc = String::new();
@@ -270,8 +273,10 @@ pub fn start_con(difficulty: usize)
             println!("You did not input your move correctly! Try again");
         }
     }
-    new_game.printboard();
-    println!("{} WON THE GAME!", print_piece(new_game.winner));
+    if new_game.winner.is_some() {
+        println!("{} WON THE GAME!", print_piece(new_game.winner));
+    }
+    else { println!("TIE!"); }
 }
 
 //---------------------------ConnectGame----------------------------------------------
@@ -330,7 +335,7 @@ mod con_tests {
     }
 
     #[test]
-    fn tie_con_test()
+    fn board_not_full_test()
     {
         let mut con_1 = ConGame::new();
         for a in 0..7
@@ -340,7 +345,15 @@ mod con_tests {
                         con_1.store_move(a, b, Piece::X);
                     }
             }
-        assert_eq!(con_1.winner.unwrap(), Piece::Tie);
+        assert_eq!(con_1.board_not_full(), false);
+    }
+
+    #[test]
+    fn board_not_full2_test()
+    {
+        let mut con_1 = ConGame::new();
+        con_1.store_move(5, 1, Piece::X);
+        assert_eq!(con_1.board_not_full(), true);
     }
 
     #[test]

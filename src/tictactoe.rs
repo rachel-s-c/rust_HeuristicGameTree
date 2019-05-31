@@ -213,14 +213,6 @@ impl<'a> TicGame
 
     fn store_move(&mut self, position:usize, player: Piece){
         self.board[position] = Some(player);
-        for piec in self.board.iter()
-            {
-                if piec.is_none()
-                {
-                    return;
-                }
-            }
-        self.winner = Some(Piece::Tie);
     }
 
     fn check_win(&mut self, player: Piece) -> bool
@@ -256,13 +248,25 @@ impl<'a> TicGame
         count
     }
 
+    fn board_not_full(&self) -> bool
+    {
+        for piec in self.board.iter()
+            {
+                if piec.is_none()
+                {
+                    return true
+                }
+            }
+        false
+    }
+
 }
 
 pub fn start_tic(difficulty: usize)
 {
     let mut new_game = TicGame::new();
 
-    while new_game.winner == None {
+    while new_game.winner == None && new_game.board_not_full() {
         println!("Where do you want to put your X? Input format: row(space)column e.g. A 1");
         new_game.printboard();
         let mut loc = String::new();
@@ -299,7 +303,10 @@ pub fn start_tic(difficulty: usize)
         }
     }
     new_game.printboard();
-    println!("{} WON THE GAME!", print_piece(new_game.winner));
+    if new_game.winner.is_some() {
+        println!("{} WON THE GAME!", print_piece(new_game.winner));
+    }
+    else { println!("TIE!"); }
 }
 
 //------------------------------------TicGame-----------------------------------------
@@ -358,7 +365,15 @@ mod tic_tests {
     }
 
     #[test]
-    fn tie_tic_test()
+    fn board_not_full_test()
+    {
+        let mut tic_1 = TicGame::new();
+        tic_1.store_move(5, Piece::X);
+        assert_eq!(tic_1.board_not_full(), true);
+    }
+
+    #[test]
+    fn board_not_full2_test()
     {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(0, Piece::X);
@@ -370,7 +385,7 @@ mod tic_tests {
         tic_1.store_move(6, Piece::O);
         tic_1.store_move(7, Piece::X);
         tic_1.store_move(8, Piece::O);
-        assert_eq!(tic_1.winner.unwrap(), Piece::Tie);
+        assert_eq!(tic_1.board_not_full(), false);
     }
 
     #[test]

@@ -19,7 +19,6 @@ pub fn lets_play(game: usize, diff: usize)
 pub enum Piece {
     X,
     O,
-    Tie
 }
 
 impl Piece {
@@ -41,18 +40,14 @@ pub fn print_piece<'a>(item: Option<Piece>) -> &'a str
 {
     if item.is_none()
     {
-        return " "
+       return " "
     }
     if item.unwrap().is_x()
     {
-        return "X"
+      return  "X"
     }
-    if item.unwrap().is_o()
-    {
-        return "O"
-    }
+   return "O"
 
-    "Tie"
 }
 
 #[allow(unused)]
@@ -175,10 +170,4 @@ mod gen_game_tests {
     }
 
 
-    #[test]
-    fn tie_printcheck()
-    {
-        let o = Piece::Tie;
-        assert_eq!(print_piece(Some(o)), "Tie");
-    }
 }
