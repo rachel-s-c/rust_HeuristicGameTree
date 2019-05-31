@@ -47,13 +47,13 @@ fn difficulty_level() -> usize {
         {
             if difficulty.contains("easy")
             {
-                0
+                1
             } else if difficulty.contains("medium")
             {
-                1
+                2
             } else if difficulty.contains("hard")
             {
-                2
+                3
             } else {
                 eprintln!("Sorry, we do not offer that difficulty! BYE!");
                 process::exit(1);

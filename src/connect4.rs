@@ -12,7 +12,6 @@ impl<'a> HeuristicGameTree for ConGame {
                 list.push(i);
             }
         }
-        println!("{:?}", list);
         list
     }
     // MAKE THIS BETTER
