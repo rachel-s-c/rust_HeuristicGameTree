@@ -21,51 +21,37 @@ impl<'a> HeuristicGameTree for ConGame {
         let mut o_streak = 1;
         // First check for wins
         let mut mutableself = self.clone();
-        let (col, row) = mutableself.most_recent;
-        if mutableself.check_win(col, row, Piece::X)
-        {
-            x_streak = 4;
-        }
-        if mutableself.check_win(col, row, Piece::O)
-        {
-            o_streak = 4;
-        }
-
-        if x_streak != 4 {
-            'outer: for a in 0..6
-                {
-                    for b in 0..5
+        'outer: for a in 0..6
+            {
+                for b in 0..5
+                    {
+                        if mutableself.board[a][b] == Some(Piece::X)
                         {
-                            if mutableself.board[a][b] == Some(Piece::X)
+                            let cur = mutableself.longest_row(a, b, Piece::X);
+                            x_streak = max(cur, x_streak);
+                            if x_streak >= 4
                             {
-                                let cur = mutableself.longest_row(a, b, Piece::X);
-                                x_streak = max(cur, x_streak);
-                                if x_streak == 3
-                                {
-                                    break 'outer;
-                                }
+                                break 'outer;
                             }
                         }
-                }
-        }
+                    }
+            }
 
-        if o_streak != 4 {
-            'outer2: for a in 0..6
-                {
-                    for b in 0..5
+        'outer2: for a in 0..6
+            {
+                for b in 0..5
+                    {
+                        if mutableself.board[a][b] == Some(Piece::O)
                         {
-                            if mutableself.board[a][b] == Some(Piece::O)
+                            let cur = mutableself.longest_row(a, b, Piece::O);
+                            o_streak = max(cur, o_streak);
+                            if o_streak >= 4
                             {
-                                let cur = mutableself.longest_row(a, b, Piece::O);
-                                x_streak = max(cur, o_streak);
-                                if o_streak == 3
-                                {
-                                    break 'outer2;
-                                }
+                                break 'outer2;
                             }
                         }
-                }
-        }
+                    }
+            }
 
 
         x_streak - o_streak // Why is this backwards?
@@ -87,7 +73,6 @@ struct ConGame
 {
     board: [[Option<Piece>; 6]; 7],
     winner: Option<Piece>,
-    most_recent: (usize, usize),
 }
 
 impl ConGame
@@ -97,7 +82,6 @@ impl ConGame
         ConGame {
             board: [[None; 6]; 7],
             winner: None,
-            most_recent: (0, 0),
         }
     }
 
@@ -143,7 +127,6 @@ impl ConGame
 
     fn store_move(&mut self, col: usize, row: usize, player: Piece) {
         self.board[col][row] = Some(player);
-        self.most_recent = (col, row);
     }
     fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
     {
@@ -302,7 +285,7 @@ impl ConGame
                 for piec in pie.iter() {
                     if piec.is_none()
                     {
-                       return true
+                        return true
                     }
                 }
             }
