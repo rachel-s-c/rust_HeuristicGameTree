@@ -72,9 +72,7 @@ impl<'a> HeuristicGameTree for ConGame {
         x_streak - o_streak // Why is this backwards?
     }
     fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool) {
-        println!("a1 - {:?}", next_move);
         let (val, loc) = self.clone().validmove(next_move + 1);
-        println!("a - {}", loc);
         self.store_move(next_move, loc, if is_opponent {Piece::O} else {Piece::X});
     }
 }
@@ -470,17 +468,15 @@ pub fn start_con(difficulty: usize)
             if valid
             {
                 // pos is our move, store_move is our execute
-                println!("b - {}", row);
                 new_game.store_move(col-1, row, Piece::X);
                 if new_game.check_win(col-1, row, Piece::X)
                 {
                     new_game.winner = Some(Piece::X);
                 }
                 else {
-                     let next_move = new_game.minimax_search(difficulty * 3, true);
+                     let next_move = new_game.minimax_search(difficulty * 6, true);
                      if let Some(m) = next_move {
                          let (val, loc) = new_game.clone().validmove(m + 1);
-                         println!("c - {}", loc);
                          new_game.store_move(m, loc, Piece::O);
                          if new_game.check_win(m, loc, Piece::O) {
                              new_game.winner = Some(Piece::O);
@@ -496,6 +492,7 @@ pub fn start_con(difficulty: usize)
             println!("You did not input your move correctly! Try again");
         }
     }
+    new_game.printboard();
     if new_game.winner.is_some() {
         println!("{} WON THE GAME!", print_piece(new_game.winner));
     }
