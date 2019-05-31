@@ -4,6 +4,7 @@ use std::process;
 pub mod general_game;
 pub mod tictactoe;
 pub mod connect4;
+pub mod checkers;
 
 fn main() -> std::io::Result<()> {
     let game_num = choose_game();

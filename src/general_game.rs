@@ -1,6 +1,7 @@
 use core::isize::{MAX,MIN};
 use crate::connect4::start_con;
 use crate::tictactoe::start_tic;
+use crate::checkers::start_checkers;
 
 
 
@@ -10,7 +11,7 @@ pub fn lets_play(game: usize, diff: usize)
         {
             1 => start_tic(diff),
             2 => start_con(diff),
-            3 => println!("checkers"),
+            3 => start_checkers(diff),
             _ => println!("error"),
         }
 }
@@ -152,7 +153,7 @@ mod gen_game_tests {
     }
 
     #[test]
-    fn O_check()
+    fn o_check()
     {
         let o = Piece::O;
         assert!(o.is_o());
@@ -167,7 +168,7 @@ mod gen_game_tests {
     }
 
     #[test]
-    fn O_printcheck()
+    fn o_printcheck()
     {
         let o = Piece::O;
         assert_eq!(print_piece(Some(o)), "O");
