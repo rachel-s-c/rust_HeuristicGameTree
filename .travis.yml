@@ -9,7 +9,6 @@ cache: cargo
 
 script:
   - cargo build
-  - cargo clippy --all-targets
   - cargo test
 
 after_success: |
