@@ -52,10 +52,12 @@ pub fn print_piece<'a>(item: Option<Piece>) -> &'a str
 
 #[allow(unused)]
 pub trait HeuristicGameTree: Clone {
-    type Move: Clone;
+    type Move: Clone + Sized;
+    type Heuristic: PartialOrd;
     // Should be a type Heuristic that can be any type that can be compared; doing isize for now
 
-    fn possible_moves(&mut self) -> Vec<Self::Move>;
+    // fn possible_moves(&self) -> Iterator<Item = Self::Move>;
+    fn possible_moves(&self) -> Vec<Self::Move>;
     fn heuristic(&self) -> isize;
     fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool);
 
@@ -94,41 +96,60 @@ pub trait HeuristicGameTree: Clone {
     fn minimax_helper(&mut self, depth: usize, is_opponent: bool, mut alpha: isize, mut beta: isize) -> isize {
         let mut current_heuristic = self.heuristic();
         if depth > 0 { // End of depth, return
-            if is_opponent { // Maximizing
-                let mut child_heuristic = MIN;
-                for mymove in self.possible_moves() {
-                    let mut next_state = self.clone();
-                    next_state.execute_move(mymove.clone(), !is_opponent);
-                    let h = next_state.minimax_helper(depth-1, false, alpha, beta);
-                    if h > child_heuristic {
-                        child_heuristic = h;
-                    }
-                    if h > alpha {
-                        alpha = h;
-                    }
-                    if beta < alpha {break;}
+            // if is_opponent { // Maximizing
+            //     let mut child_heuristic = MIN;
+            //     for mymove in self.possible_moves() {
+            //         let mut next_state = self.clone();
+            //         next_state.execute_move(mymove.clone(), !is_opponent);
+            //         let h = next_state.minimax_helper(depth-1, false, alpha, beta);
+            //         if h > child_heuristic {
+            //             child_heuristic = h;
+            //         }
+            //         if h > alpha {
+            //             alpha = h;
+            //         }
+            //         if beta < alpha {break;}
+            //     }
+            //     if child_heuristic > MIN {
+            //         current_heuristic = child_heuristic;
+            //     }
+            // }
+            // else { // Minimizing
+            //     let mut child_heuristic = MAX;
+            //     for mymove in self.possible_moves() {
+            //         let mut next_state = self.clone();
+            //         next_state.execute_move(mymove.clone(), !is_opponent);
+            //         let h = next_state.minimax_helper(depth-1, false, alpha, beta);
+            //         if h < child_heuristic {
+            //             child_heuristic = h;
+            //         }
+            //         if h > beta {
+            //             beta = h;
+            //         }
+            //         if beta < alpha {break;}
+            //     }
+            //     if child_heuristic < MAX {
+            //         current_heuristic = child_heuristic;
+            //     }
+            // }
+            let mut child_heuristic = if is_opponent {MIN} else {MAX};
+            for mymove in self.possible_moves() {
+                let mut next_state = self.clone();
+                next_state.execute_move(mymove.clone(), !is_opponent);
+                let h = next_state.minimax_helper(depth-1, false, alpha, beta);
+                if (h > child_heuristic && is_opponent) || (h < child_heuristic && !is_opponent) {
+                    child_heuristic = h;
                 }
-                if child_heuristic > MIN {
-                    current_heuristic = child_heuristic;
+                if is_opponent && h > alpha {
+                    alpha = h;
                 }
+                else if !is_opponent && h > beta {
+                    beta = h;
+                }
+                if beta < alpha {break;}
             }
-            else { // Minimizing
-                let mut child_heuristic = MAX;
-                for mymove in self.possible_moves() {
-                    let mut next_state = self.clone();
-                    next_state.execute_move(mymove.clone(), !is_opponent);
-                    let h = next_state.minimax_helper(depth-1, false, alpha, beta);
-                    if h < child_heuristic {
-                        child_heuristic = h;
-                    }
-                    if h > beta {
-                        beta = h;
-                    }
-                    if beta < alpha {break;}
-                }
-                if child_heuristic < MAX {
-                    current_heuristic = child_heuristic;
-                }
+            if (child_heuristic > MIN && is_opponent) || (child_heuristic < MAX && !is_opponent) {
+                current_heuristic = child_heuristic;
             }
         }
         current_heuristic
