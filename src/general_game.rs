@@ -4,7 +4,6 @@ use crate::tictactoe::start_tic;
 use crate::checkers::start_checkers;
 
 
-
 pub fn lets_play(game: usize, diff: usize)
 {
     match game
