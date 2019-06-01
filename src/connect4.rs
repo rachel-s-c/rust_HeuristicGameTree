@@ -5,7 +5,7 @@ use crate::general_game::print_piece;
 
 impl<'a> HeuristicGameTree for ConGame {
     type Move = usize;
-    fn possible_moves(&mut self) -> Vec<Self::Move> {
+    fn possible_moves(&self) -> Vec<Self::Move> {
         let mut list = Vec::new();
         for i in 0..7 {
             if self.board[i][5].is_none() {

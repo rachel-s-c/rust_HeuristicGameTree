@@ -9,7 +9,7 @@ const TICWINS: [[usize; 3]; 8] = [[0, 1, 2], [0, 3, 6], [0, 4, 8], [1, 4, 7], [2
 
 impl<'a> HeuristicGameTree for TicGame {
     type Move = usize;
-    type Heuristic = isize;
+    //type Heuristic = isize;
     // fn possible_moves(&self) -> Iterator<Item = Self::Move> {
     fn possible_moves(&self) -> Vec<Self::Move> {
         let mut list = Vec::new();
