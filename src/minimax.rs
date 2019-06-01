@@ -10,7 +10,6 @@ pub trait HeuristicGameTree {
     fn possible_moves(&self) -> impl Iter<Item = Move>;
     fn heuristic(&self) -> Heuristic;
     fn execute_move(&mut self);
-
     fn minimax_search(&self, depth: usize, is_opponent: bool,) -> Move {
         // Gets the possible moves (i.e. children)
         // Makes executes each move on a copy of the game
