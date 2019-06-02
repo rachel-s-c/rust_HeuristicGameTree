@@ -14,11 +14,10 @@ impl<'a> HeuristicGameTree for ConGame {
         }
         list
     }
-    // MAKE THIS BETTER
     fn heuristic(&self) -> isize {
 
-        let mut x_streak = 1;
-        let mut o_streak = 1;
+        let mut x_streak = 0;
+        let mut o_streak = 0;
         // First check for wins
         let mut mutableself = self.clone();
         'outer: for a in 0..6
@@ -53,7 +52,8 @@ impl<'a> HeuristicGameTree for ConGame {
                     }
             }
 
-
+        println!("X: {}", x_streak);
+        println!("O: {}", o_streak);
         x_streak - o_streak // Why is this backwards?
     }
     fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool) {
