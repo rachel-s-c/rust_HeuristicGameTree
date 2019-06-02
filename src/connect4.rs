@@ -51,9 +51,6 @@ impl<'a> HeuristicGameTree for ConGame {
                         }
                     }
             }
-
-        println!("X: {}", x_streak);
-        println!("O: {}", o_streak);
         x_streak - o_streak // Why is this backwards?
     }
     fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool) {
