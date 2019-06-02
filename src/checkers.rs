@@ -3,36 +3,6 @@ use std::cmp::max;
 use crate::general_game::print_piece;
 use crate::general_game::{HeuristicGameTree, Piece};
 
-
-// #[derive (PartialEq, Copy, Clone, Debug)]
-// pub enum Piece {
-//     X,
-//     O,
-// }
-
-// impl Piece {
-//     fn is_x(&self) -> bool {
-//         if let Piece::X = self {
-//             true
-//         }
-//         else {false}
-//     }
-// }
-
-// pub fn print_piece<'a>(item: Option<Piece>) -> &'a str {
-//     if item.is_none()
-//     {
-//         " "
-//     }
-//     else if item.unwrap().is_x()
-//     {
-//         "X"
-//     }
-//     else {
-//     	"O"
-//     }
-// }
-
 #[derive (Clone)]
 struct CheckersGame {
     board: [Option<Piece>; 32],
@@ -114,5 +84,19 @@ pub fn start_checkers(_difficulty: usize) {
         }
         println!("{}",start);
         // O goes first
+    }
+}
+
+#[cfg(test)]
+mod check_tests {
+    use super::Piece;
+    use super::CheckersGame;
+    use super::print_piece;
+
+    #[test]
+    fn new_check_test()
+    {
+        let check_1 = CheckersGame::new();
+        assert_eq!(check_1.winner, None);
     }
 }

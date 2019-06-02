@@ -53,9 +53,9 @@ impl<'a> HeuristicGameTree for ConGame {
             }
         x_streak - o_streak // Why is this backwards?
     }
-    fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool) {
+    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) {
         let (val, loc) = self.clone().validmove(next_move + 1);
-        self.store_move(next_move, loc, if is_opponent {Piece::O} else {Piece::X});
+        self.store_move(*next_move, loc, if is_opponent {Piece::O} else {Piece::X});
     }
 }
 
@@ -453,7 +453,7 @@ pub fn start_con(difficulty: usize)
                     new_game.winner = Some(Piece::X);
                 }
                 else {
-                     let next_move = new_game.minimax_search(difficulty * 6, true);
+                     let next_move = new_game.minimax_search(difficulty * 8, true);
                      if let Some(m) = next_move {
                          let (val, loc) = new_game.clone().validmove(m + 1);
                          new_game.store_move(m, loc, Piece::O);

@@ -58,7 +58,7 @@ pub trait HeuristicGameTree: Clone {
     // fn possible_moves(&self) -> Iterator<Item = Self::Move>;
     fn possible_moves(&self) -> Vec<Self::Move>;
     fn heuristic(&self) -> isize;
-    fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool);
+    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool);
 
     fn minimax_search(&mut self, depth: usize, is_opponent: bool) -> Option<Self::Move> {
         // Gets the possible moves (i.e. children)
@@ -70,7 +70,7 @@ pub trait HeuristicGameTree: Clone {
         if depth > 0 {
             for mymove in self.possible_moves() {
                 let mut next_state = self.clone();
-                next_state.execute_move(mymove.clone(), !is_opponent); // Need to clone, standard procedure with minimax
+                next_state.execute_move(&mymove.clone(), !is_opponent); // Need to clone, standard procedure with minimax
                 let h = next_state.minimax_helper(depth-1, false, MAX, MIN);
                 if h > best_move.1 {
                     best_move = (Some(mymove),h);
@@ -98,7 +98,7 @@ pub trait HeuristicGameTree: Clone {
             let mut child_heuristic = if is_opponent {MIN} else {MAX};
             for mymove in self.possible_moves() {
                 let mut next_state = self.clone();
-                next_state.execute_move(mymove.clone(), !is_opponent);
+                next_state.execute_move(&mymove.clone(), !is_opponent);
                 let h = next_state.minimax_helper(depth-1, false, alpha, beta);
                 if (h > child_heuristic && is_opponent) || (h < child_heuristic && !is_opponent) {
                     child_heuristic = h;

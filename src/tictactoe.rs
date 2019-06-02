@@ -162,8 +162,8 @@ impl<'a> HeuristicGameTree for TicGame {
         }
         x_streak - o_streak // Why is this backwards?
     }
-    fn execute_move(&mut self, next_move: Self::Move, is_opponent: bool) {
-        self.store_move(next_move, if is_opponent {Piece::O} else {Piece::X});
+    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) {
+        self.store_move(*next_move, if is_opponent {Piece::O} else {Piece::X});
     }
 }
 //------------------------------------TicGame-----------------------------------------
