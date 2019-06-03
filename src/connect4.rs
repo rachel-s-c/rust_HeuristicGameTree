@@ -26,7 +26,7 @@ impl<'a> HeuristicGameTree for ConGame {
                     {
                         if mutableself.board[a][b] == Some(Piece::X)
                         {
-                            let cur = mutableself.longest_row(a, b, Piece::X);
+                            let cur = mutableself.check_win_and_length(a, b, Piece::X).1;
                             x_streak = max(cur, x_streak);
                             if x_streak >= 4
                             {
@@ -42,7 +42,7 @@ impl<'a> HeuristicGameTree for ConGame {
                     {
                         if mutableself.board[a][b] == Some(Piece::O)
                         {
-                            let cur = mutableself.longest_row(a, b, Piece::O);
+                            let cur = mutableself.check_win_and_length(a, b, Piece::O).1;
                             o_streak = max(cur, o_streak);
                             if o_streak >= 4
                             {
@@ -112,8 +112,9 @@ impl ConGame
     fn store_move(&mut self, col: usize, row: usize, player: Piece) {
         self.board[col][row] = Some(player);
     }
-    fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
+    fn check_win_and_length(&mut self, col: usize, row: usize, player: Piece) -> (bool, isize)
     {
+        let mut lengths = Vec::new();
         let mut in_row = 1;
 
         if col != 0 {
@@ -127,7 +128,7 @@ impl ConGame
                     }
                 }
         }
-        for i in col+1..7
+        for i in col + 1..7
             {
                 if i <= 6 {
                     if self.board[i][row] == Some(player)
@@ -138,10 +139,7 @@ impl ConGame
                     }
                 }
             }
-        if in_row >= 4
-        {
-            return true;
-        }
+        lengths.push(in_row);
         in_row = 1;
         if row != 0 {
             for i in (0..=row - 1).rev() //vertical
@@ -154,7 +152,7 @@ impl ConGame
                     }
                 }
         }
-        for i in row+1..6
+        for i in row + 1..6
             {
                 if i <= 5 {
                     if self.board[col][i] == Some(player)
@@ -165,10 +163,7 @@ impl ConGame
                     }
                 }
             }
-        if in_row >= 4
-        {
-            return true;
-        }
+        lengths.push(in_row);
         in_row = 1;
         for i in 1..5 //l diag
             {
@@ -182,8 +177,7 @@ impl ConGame
                     } else {
                         break;
                     }
-                }
-                else {
+                } else {
                     break;
                 }
             }
@@ -200,15 +194,11 @@ impl ConGame
                     } else {
                         break;
                     }
-                }
-                else {
+                } else {
                     break;
                 }
             }
-        if in_row >= 4
-        {
-            return true;
-        }
+        lengths.push(in_row);
         in_row = 1;
         for i in 1..5 //r diag
             {
@@ -228,8 +218,7 @@ impl ConGame
                     } else {
                         break;
                     }
-                }
-                else {
+                } else {
                     break;
                 }
             }
@@ -251,17 +240,17 @@ impl ConGame
                     } else {
                         break;
                     }
-                }
-                else {
+                } else {
                     break;
                 }
             }
-        if in_row >= 4
-        {
-            return true;
-        }
+        lengths.push(in_row);
 
-        false
+        let longest = *lengths.iter().max().unwrap();
+        let mut win = {
+            if longest >= 4 { true } else { false }
+        };
+    (win, longest)
     }
     fn board_not_full(&self) -> bool
     {
@@ -276,146 +265,6 @@ impl ConGame
             }
         false
     }
-    fn longest_row(&mut self, col: usize, row: usize, player: Piece) -> isize
-    {
-        let mut lengths = Vec::new();
-        let mut in_row = 1;
-        if col != 0 {
-            for i in (0..=col - 1).rev() //horizontal
-                {
-                    if self.board[i][row] == Some(player)
-                    {
-                        in_row += 1;
-                    } else {
-                        break;
-                    }
-                }
-        }
-        for i in col+1..7
-            {
-                if i <= 6 {
-                    if self.board[i][row] == Some(player)
-                    {
-                        in_row += 1;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        lengths.push(in_row);
-        in_row = 1;
-        if row != 0 {
-            for i in (0..=row - 1).rev() //vertical
-                {
-                    if self.board[col][i] == Some(player)
-                    {
-                        in_row += 1;
-                    } else {
-                        break;
-                    }
-                }
-        }
-        for i in row+1..6
-            {
-                if i <= 5 {
-                    if self.board[col][i] == Some(player)
-                    {
-                        in_row += 1;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        lengths.push(in_row);
-        in_row = 1;
-        for i in 1..5 //l diag
-            {
-                if row >= i && col >= i
-                {
-                    let adj_row = row - i;
-                    let adj_col = col - i;
-                    if self.board[adj_col][adj_row] == Some(player)
-                    {
-                        in_row += 1;
-                    } else {
-                        break;
-                    }
-                }
-                else {
-                    break;
-                }
-            }
-        for i in 1..5 //l diag
-            {
-                let adj_row = row + i;
-                let adj_col = col + i;
-
-                if adj_col <= 6 && adj_row <= 5
-                {
-                    if self.board[adj_col][adj_row] == Some(player)
-                    {
-                        in_row += 1;
-                    } else {
-                        break;
-                    }
-                }
-                else {
-                    break;
-                }
-            }
-        lengths.push(in_row);
-        in_row = 1;
-        for i in 1..5 //r diag
-            {
-                if col >= i
-                {
-                    let adj_row = row + i;
-                    let adj_col = col - i;
-
-                    if adj_row <= 5
-                    {
-                        if self.board[adj_col][adj_row] == Some(player)
-                        {
-                            in_row += 1;
-                        } else {
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                else {
-                    break;
-                }
-            }
-        for i in 1..5 //r diag
-            {
-                if row >= i
-                {
-                    let adj_row = row - i;
-                    let adj_col = col + i;
-
-                    if adj_col <= 6
-                    {
-                        if self.board[adj_col][adj_row] == Some(player)
-                        {
-                            in_row += 1;
-                        } else {
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                else {
-                    break;
-                }
-            }
-        lengths.push(in_row);
-
-        *lengths.iter().max().unwrap()
-    }
-
 }
 
 pub fn start_con(difficulty: usize)
@@ -436,7 +285,7 @@ pub fn start_con(difficulty: usize)
             {
                 // pos is our move, store_move is our execute
                 new_game.store_move(col-1, row, Piece::X);
-                if new_game.check_win(col-1, row, Piece::X)
+                if new_game.check_win_and_length(col-1, row, Piece::X).0
                 {
                     new_game.winner = Some(Piece::X);
                 }
@@ -445,7 +294,7 @@ pub fn start_con(difficulty: usize)
                      if let Some(m) = next_move {
                          let (val, loc) = new_game.clone().validmove(m + 1);
                          new_game.store_move(m, loc, Piece::O);
-                         if new_game.check_win(m, loc, Piece::O) {
+                         if new_game.check_win_and_length(m, loc, Piece::O).0 {
                              new_game.winner = Some(Piece::O);
                          }
                      }
@@ -547,7 +396,7 @@ mod con_tests {
     fn lose_con_test()
     {
         let mut con_1 = ConGame::new();
-        let a = con_1.check_win(5, 1, Piece::X);
+        let a = con_1.check_win_and_length(5, 1, Piece::X).1;
         assert!(!a);
     }
 
@@ -559,7 +408,7 @@ mod con_tests {
         con_1.store_move(1, 2,  Piece::X);
         con_1.store_move(1, 3, Piece::X);
         con_1.store_move(1, 4, Piece::X);
-        let a = con_1.check_win(1, 4, Piece::X);
+        let a = con_1.check_win_and_length(1, 4, Piece::X).1;
         assert!(a);
     }
 
@@ -571,7 +420,7 @@ mod con_tests {
         con_1.store_move(2, 1,  Piece::X);
         con_1.store_move(3, 1, Piece::X);
         con_1.store_move(4, 1, Piece::X);
-        let a = con_1.check_win(4, 1, Piece::X);
+        let a = con_1.check_win_and_length(4, 1, Piece::X).1;
         assert!(a);
     }
 }
