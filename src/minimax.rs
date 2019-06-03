@@ -54,7 +54,7 @@ pub struct Position {
     children: Vec<Position>,
 }
 
-impl Position{
+impl Position {
 
     /// Creates a new position with value of 0.0 and an empty vector for children
     pub fn new() -> Position {

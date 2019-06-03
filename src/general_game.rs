@@ -37,15 +37,13 @@ impl Piece {
 
 pub fn print_piece<'a>(item: Option<Piece>) -> &'a str
 {
-    if item.is_none()
-    {
-       return " "
+    if item.is_none() {
+        return " "
     }
-    if item.unwrap().is_x()
-    {
-      return  "X"
+    if item.unwrap().is_x() {
+        return  "X"
     }
-   return "O"
+    return "O"
 
 }
 
@@ -125,30 +123,26 @@ mod gen_game_tests {
     use super::print_piece;
 
     #[test]
-    fn x_check()
-    {
+    fn x_check() {
         let x = Piece::X;
         assert!(x.is_x());
     }
 
     #[test]
-    fn o_check()
-    {
+    fn o_check() {
         let o = Piece::O;
         assert!(o.is_o());
     }
 
 
     #[test]
-    fn x_printcheck()
-    {
+    fn x_printcheck() {
         let x = Piece::X;
         assert_eq!(print_piece(Some(x)), "X");
     }
 
     #[test]
-    fn o_printcheck()
-    {
+    fn o_printcheck() {
         let o = Piece::O;
         assert_eq!(print_piece(Some(o)), "O");
     }

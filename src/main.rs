@@ -39,14 +39,11 @@ fn choose_game(game: String) -> usize {
 
     let game = game.to_lowercase();
     let game_num = {
-        if game.contains("tic")
-        {
+        if game.contains("tic") {
             1
-        } else if game.contains("connect4")
-        {
+        } else if game.contains("connect4") {
             2
-        } else if game.contains("checkers")
-        {
+        } else if game.contains("checkers") {
             3
         } else {
             eprintln!("Sorry, we do not offer that game! BYE!");
@@ -59,16 +56,12 @@ fn choose_game(game: String) -> usize {
 fn difficulty_level(difficulty: String) -> usize {
     let _ = stdout().flush();
     let difficulty = difficulty.to_lowercase();
-    let difficulty_num =
-        {
-            if difficulty.contains("easy")
-            {
+    let difficulty_num = {
+            if difficulty.contains("easy") {
                 1
-            } else if difficulty.contains("med")
-            {
+            } else if difficulty.contains("med") {
                 2
-            } else if difficulty.contains("hard")
-            {
+            } else if difficulty.contains("hard") {
                 3
             } else {
                 2
@@ -136,14 +129,11 @@ fn choose_game2(game: String) -> usize {
 
     let game = game.to_lowercase();
     let game_num = {
-        if game.contains("tic")
-        {
+        if game.contains("tic") {
             1
-        } else if game.contains("connect4")
-        {
+        } else if game.contains("connect4") {
             2
-        } else if game.contains("checkers")
-        {
+        } else if game.contains("checkers") {
             3
         } else {
             eprintln!("Sorry, we do not offer that game! Please run the program again with either \

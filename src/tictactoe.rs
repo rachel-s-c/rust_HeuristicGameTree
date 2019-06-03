@@ -128,7 +128,7 @@ impl<'a> HeuristicGameTree for TicGame {
             }
         }
         if self.board[2].is_some() {
-           // let corner = self.board[0].clone();
+            // let corner = self.board[0].clone();
             if corner == self.board[1] || corner == self.board[5] {
                 if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
@@ -139,7 +139,7 @@ impl<'a> HeuristicGameTree for TicGame {
             }
         }
         if self.board[6].is_some() {
-          //  let corner = self.board[0].clone();
+            //  let corner = self.board[0].clone();
             if corner == self.board[7] || corner == self.board[3] {
                 if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
@@ -150,7 +150,7 @@ impl<'a> HeuristicGameTree for TicGame {
             }
         }
         if self.board[8].is_some() {
-          //  let corner = self.board[0].clone();
+            //  let corner = self.board[0].clone();
             if corner == self.board[7] || corner == self.board[5] {
                 if corner == Some(Piece::X) {
                     x_streak = max(x_streak,2);
@@ -321,63 +321,55 @@ mod tic_tests {
     use super::print_piece;
 
     #[test]
-    fn new_tic_test()
-    {
+    fn new_tic_test() {
         let tic_1 = TicGame::new();
         assert_eq!(tic_1.board[1], None);
     }
 
     #[test]
-    fn store_tic_test()
-    {
+    fn store_tic_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
         assert_eq!(tic_1.board[5].unwrap(), Piece::X);
     }
 
     #[test]
-    fn print_piece_x_tic_test()
-    {
+    fn print_piece_x_tic_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
         assert_eq!(print_piece(tic_1.board[5]), "X");
     }
 
     #[test]
-    fn print_piece_o_tic_test()
-    {
+    fn print_piece_o_tic_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::O);
         assert_eq!(print_piece(tic_1.board[5]), "O");
     }
 
     #[test]
-    fn print_piece_empty_tic_test()
-    {
+    fn print_piece_empty_tic_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
         assert_eq!(print_piece(tic_1.board[6]), " ");
     }
 
     #[test]
-    fn move_count_test()
-    {
+    fn move_count_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
         assert_eq!(tic_1.move_count(), 1);
     }
 
     #[test]
-    fn board_not_full_test()
-    {
+    fn board_not_full_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(5, Piece::X);
         assert_eq!(tic_1.board_not_full(), true);
     }
 
     #[test]
-    fn board_not_full2_test()
-    {
+    fn board_not_full2_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(0, Piece::X);
         tic_1.store_move(1, Piece::O);
@@ -392,32 +384,28 @@ mod tic_tests {
     }
 
     #[test]
-    fn valid_tic_test()
-    {
+    fn valid_tic_test() {
         let mut tic_1 = TicGame::new();
         let (a, b) = tic_1.validmove("A", 2);
         assert!(a);
     }
 
     #[test]
-    fn invalid_tic_test()
-    {
+    fn invalid_tic_test() {
         let mut tic_1 = TicGame::new();
         let (a, b) = tic_1.validmove("D", 2);
         assert!(!a);
     }
 
     #[test]
-    fn lose_tic_test()
-    {
+    fn lose_tic_test() {
         let mut tic_1 = TicGame::new();
         let a = tic_1.check_win(Piece::X);
         assert!(!a);
     }
 
     #[test]
-    fn win_tic_test()
-    {
+    fn win_tic_test() {
         let mut tic_1 = TicGame::new();
         tic_1.store_move(0, Piece::X);
         tic_1.store_move(1, Piece::X);
