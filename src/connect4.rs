@@ -1,7 +1,7 @@
-use std::io::{stdin,stdout,Write};
-use std::cmp::max;
-use crate::general_game::{HeuristicGameTree, Piece};
 use crate::general_game::print_piece;
+use crate::general_game::{HeuristicGameTree, Piece};
+use std::cmp::max;
+use std::io::{stdin, stdout, Write};
 
 impl<'a> HeuristicGameTree for ConGame {
     type Move = usize;
@@ -15,7 +15,6 @@ impl<'a> HeuristicGameTree for ConGame {
         list
     }
     fn heuristic(&self) -> isize {
-
         let mut x_streak = 0;
         let mut o_streak = 0;
         // First check for wins
@@ -47,17 +46,17 @@ impl<'a> HeuristicGameTree for ConGame {
     }
     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) {
         let (val, loc) = self.clone().validmove(next_move + 1);
-        self.store_move(*next_move, loc, if is_opponent {Piece::O} else {Piece::X});
+        self.store_move(
+            *next_move,
+            loc,
+            if is_opponent { Piece::O } else { Piece::X },
+        );
     }
 }
 
-
-
-
-
 //---------------------------ConnectGame----------------------------------------------
 
-#[derive (Clone)]
+#[derive(Clone)]
 struct ConGame {
     board: [[Option<Piece>; 6]; 7],
     winner: Option<Piece>,
@@ -74,9 +73,16 @@ impl ConGame {
     fn printboard(&mut self) {
         println!("1  2  3  4  5  6  7");
         for i in (0..6).rev() {
-            println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][i]), print_piece(self.board[1][i]),
-                     print_piece(self.board[2][i]), print_piece(self.board[3][i]), print_piece(self.board[4][i]),
-                     print_piece(self.board[5][i]), print_piece(self.board[6][i]));
+            println!(
+                "{}  {}  {}  {}  {}  {}  {}",
+                print_piece(self.board[0][i]),
+                print_piece(self.board[1][i]),
+                print_piece(self.board[2][i]),
+                print_piece(self.board[3][i]),
+                print_piece(self.board[4][i]),
+                print_piece(self.board[5][i]),
+                print_piece(self.board[6][i])
+            );
         }
         println!("____________________");
     }
@@ -87,9 +93,9 @@ impl ConGame {
 
             for i in 0..6 {
                 if self.board[firstvec][i].is_none() {
-                    return (true, i)
+                    return (true, i);
                 }
-            };
+            }
         }
         (false, 10)
     }
@@ -105,7 +111,11 @@ impl ConGame {
         lengths.push(self.right_diag(col, row, player));
         let longest = *lengths.iter().max().unwrap();
         let mut win = {
-            if longest >= 4 { true } else { false }
+            if longest >= 4 {
+                true
+            } else {
+                false
+            }
         };
         (win, longest)
     }
@@ -158,7 +168,7 @@ impl ConGame {
         in_row
     }
 
-    fn lef_diag(&self, col:usize, row:usize, player: Piece) -> isize {
+    fn lef_diag(&self, col: usize, row: usize, player: Piece) -> isize {
         let mut in_row = 1;
         for i in 1..5 {
             if row >= i && col >= i {
@@ -173,7 +183,7 @@ impl ConGame {
                 break;
             }
         }
-        for i in 1..5  {
+        for i in 1..5 {
             let adj_row = row + i;
             let adj_col = col + i;
 
@@ -190,9 +200,9 @@ impl ConGame {
         in_row
     }
 
-    fn right_diag(&self, col:usize, row:usize, player: Piece) -> isize {
+    fn right_diag(&self, col: usize, row: usize, player: Piece) -> isize {
         let mut in_row = 1;
-        for i in 1..5  {
+        for i in 1..5 {
             if col >= i {
                 let adj_row = row + i;
                 let adj_col = col - i;
@@ -235,7 +245,7 @@ impl ConGame {
         for pie in self.board.iter() {
             for piec in pie.iter() {
                 if piec.is_none() {
-                    return true
+                    return true;
                 }
             }
         }
@@ -251,18 +261,19 @@ pub fn start_con(difficulty: usize) {
         new_game.printboard();
         let mut loc = String::new();
         let _ = stdout().flush();
-        stdin().read_line(&mut loc).expect("Did not enter a correct string");
+        stdin()
+            .read_line(&mut loc)
+            .expect("Did not enter a correct string");
         let mut loc = loc.split_whitespace();
         if loc.clone().count() == 1 {
-            let col =  loc.next().unwrap().parse().unwrap();
+            let col = loc.next().unwrap().parse().unwrap();
             let (valid, row) = new_game.clone().validmove(col); //throw error
             if valid {
                 // pos is our move, store_move is our execute
-                new_game.store_move(col-1, row, Piece::X);
-                if new_game.check_win_and_length(col-1, row, Piece::X).0 {
+                new_game.store_move(col - 1, row, Piece::X);
+                if new_game.check_win_and_length(col - 1, row, Piece::X).0 {
                     new_game.winner = Some(Piece::X);
-                }
-                else {
+                } else {
                     let next_move = new_game.minimax_search(difficulty * 8, true);
                     if let Some(m) = next_move {
                         let (val, loc) = new_game.clone().validmove(m + 1);
@@ -272,29 +283,28 @@ pub fn start_con(difficulty: usize) {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 println!("That is not a valid move! Try again");
             }
-        }
-        else {
+        } else {
             println!("You did not input your move correctly! Try again");
         }
     }
     new_game.printboard();
     if new_game.winner.is_some() {
         println!("{} WON THE GAME!", print_piece(new_game.winner));
+    } else {
+        println!("TIE!");
     }
-    else { println!("TIE!"); }
 }
 
 //---------------------------ConnectGame----------------------------------------------
 
 #[cfg(test)]
 mod con_tests {
-    use super::Piece;
-    use super::ConGame;
     use super::print_piece;
+    use super::ConGame;
+    use super::Piece;
 
     #[test]
     fn new_con_test() {
@@ -340,13 +350,11 @@ mod con_tests {
     #[test]
     fn board_not_full_test() {
         let mut con_1 = ConGame::new();
-        for a in 0..7
-            {
-                for b in 0..6
-                    {
-                        con_1.store_move(a, b, Piece::X);
-                    }
+        for a in 0..7 {
+            for b in 0..6 {
+                con_1.store_move(a, b, Piece::X);
             }
+        }
         assert_eq!(con_1.board_not_full(), false);
     }
 
@@ -367,8 +375,8 @@ mod con_tests {
     #[test]
     fn win_vert_con_test() {
         let mut con_1 = ConGame::new();
-        con_1.store_move(1, 1,  Piece::X);
-        con_1.store_move(1, 2,  Piece::X);
+        con_1.store_move(1, 1, Piece::X);
+        con_1.store_move(1, 2, Piece::X);
         con_1.store_move(1, 3, Piece::X);
         con_1.store_move(1, 4, Piece::X);
         let a = con_1.check_win_and_length(1, 4, Piece::X).0;
@@ -378,8 +386,8 @@ mod con_tests {
     #[test]
     fn win_horiz_con_test() {
         let mut con_1 = ConGame::new();
-        con_1.store_move(1, 1,  Piece::X);
-        con_1.store_move(2, 1,  Piece::X);
+        con_1.store_move(1, 1, Piece::X);
+        con_1.store_move(2, 1, Piece::X);
         con_1.store_move(3, 1, Piece::X);
         con_1.store_move(4, 1, Piece::X);
         let a = con_1.check_win_and_length(4, 1, Piece::X).0;
@@ -389,8 +397,8 @@ mod con_tests {
     #[test]
     fn horiz_test() {
         let mut con_1 = ConGame::new();
-        con_1.store_move(1, 1,  Piece::X);
-        con_1.store_move(2, 1,  Piece::X);
+        con_1.store_move(1, 1, Piece::X);
+        con_1.store_move(2, 1, Piece::X);
         con_1.store_move(3, 1, Piece::X);
         con_1.store_move(4, 1, Piece::X);
         let a = con_1.horizontal(3, 1, Piece::X);
@@ -400,33 +408,33 @@ mod con_tests {
     #[test]
     fn vert_test() {
         let mut con_1 = ConGame::new();
-        con_1.store_move(1, 1,  Piece::X);
-        con_1.store_move(1, 2,  Piece::X);
+        con_1.store_move(1, 1, Piece::X);
+        con_1.store_move(1, 2, Piece::X);
         con_1.store_move(1, 3, Piece::X);
         con_1.store_move(1, 4, Piece::X);
-        let a = con_1.vertical( 1, 2, Piece::X);
+        let a = con_1.vertical(1, 2, Piece::X);
         assert_eq!(a, 4);
     }
 
     #[test]
     fn ldiag_test() {
         let mut con_1 = ConGame::new();
-        con_1.store_move(0, 0,  Piece::X);
-        con_1.store_move(1, 1,  Piece::X);
+        con_1.store_move(0, 0, Piece::X);
+        con_1.store_move(1, 1, Piece::X);
         con_1.store_move(2, 2, Piece::X);
         con_1.store_move(3, 3, Piece::X);
-        let a = con_1.lef_diag( 1, 1, Piece::X);
+        let a = con_1.lef_diag(1, 1, Piece::X);
         assert_eq!(a, 4);
     }
 
     #[test]
     fn rdiag_test() {
         let mut con_1 = ConGame::new();
-        con_1.store_move(0, 3,  Piece::X);
-        con_1.store_move(1, 2,  Piece::X);
+        con_1.store_move(0, 3, Piece::X);
+        con_1.store_move(1, 2, Piece::X);
         con_1.store_move(2, 1, Piece::X);
         con_1.store_move(3, 0, Piece::X);
-        let a = con_1.right_diag( 2, 1, Piece::X);
+        let a = con_1.right_diag(2, 1, Piece::X);
         assert_eq!(a, 4);
     }
 }

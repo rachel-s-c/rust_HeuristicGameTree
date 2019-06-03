@@ -1,10 +1,10 @@
-use std::io::{stdin,stdout,Write};
-use std::{process, env};
+use std::io::{stdin, stdout, Write};
+use std::{env, process};
 
+pub mod checkers;
+pub mod connect4;
 pub mod general_game;
 pub mod tictactoe;
-pub mod connect4;
-pub mod checkers;
 
 fn main() -> std::io::Result<()> {
     //let (game_num, difficulty_num) = choose_game(read_input().0, read_input().1);
@@ -57,16 +57,16 @@ fn difficulty_level(difficulty: String) -> usize {
     let _ = stdout().flush();
     let difficulty = difficulty.to_lowercase();
     let difficulty_num = {
-            if difficulty.contains("easy") {
-                1
-            } else if difficulty.contains("med") {
-                2
-            } else if difficulty.contains("hard") {
-                3
-            } else {
-                2
-            }
-        };
+        if difficulty.contains("easy") {
+            1
+        } else if difficulty.contains("med") {
+            2
+        } else if difficulty.contains("hard") {
+            3
+        } else {
+            2
+        }
+    };
     difficulty_num
 }
 
@@ -105,22 +105,22 @@ mod start_tests {
     }
 
     #[test]
-    fn choose_game_tic(){
+    fn choose_game_tic() {
         assert_eq!(choose_game("tic".to_owned()), 1);
     }
 
     #[test]
-    fn choose_game_con(){
+    fn choose_game_con() {
         assert_eq!(choose_game("connect4".to_owned()), 2);
     }
 
     #[test]
-    fn choose_game_check(){
+    fn choose_game_check() {
         assert_eq!(choose_game("checkers".to_owned()), 3);
     }
 
     #[test]
-    fn choose_game_check_cap(){
+    fn choose_game_check_cap() {
         assert_eq!(choose_game("CHECKERS".to_owned()), 3);
     }
 }
@@ -136,8 +136,10 @@ fn choose_game2(game: String) -> usize {
         } else if game.contains("checkers") {
             3
         } else {
-            eprintln!("Sorry, we do not offer that game! Please run the program again with either \
-            tictactoe, checkers or connect4!");
+            eprintln!(
+                "Sorry, we do not offer that game! Please run the program again with either \
+                 tictactoe, checkers or connect4!"
+            );
             process::exit(1);
         }
     };
