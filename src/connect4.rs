@@ -85,24 +85,11 @@ impl ConGame
     fn printboard(&mut self)
     {
         println!("1  2  3  4  5  6  7");
-        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][5]), print_piece(self.board[1][5]),
-                 print_piece(self.board[2][5]), print_piece(self.board[3][5]), print_piece(self.board[4][5]),
-                 print_piece(self.board[5][5]), print_piece(self.board[6][5]));
-        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][4]), print_piece(self.board[1][4]),
-                 print_piece(self.board[2][4]), print_piece(self.board[3][4]), print_piece(self.board[4][4]),
-                 print_piece(self.board[5][4]), print_piece(self.board[6][4]));
-        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][3]), print_piece(self.board[1][3]),
-                 print_piece(self.board[2][3]), print_piece(self.board[3][3]), print_piece(self.board[4][3]),
-                 print_piece(self.board[5][3]), print_piece(self.board[6][3]));
-        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][2]), print_piece(self.board[1][2]),
-                 print_piece(self.board[2][2]), print_piece(self.board[3][2]), print_piece(self.board[4][2]),
-                 print_piece(self.board[5][2]), print_piece(self.board[6][2]));
-        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][1]), print_piece(self.board[1][1]),
-                 print_piece(self.board[2][1]), print_piece(self.board[3][1]), print_piece(self.board[4][1]),
-                 print_piece(self.board[5][1]), print_piece(self.board[6][1]));
-        println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][0]), print_piece(self.board[1][0]),
-                 print_piece(self.board[2][0]), print_piece(self.board[3][0]), print_piece(self.board[4][0]),
-                 print_piece(self.board[5][0]), print_piece(self.board[6][0]));
+        for i in (0..6).rev() {
+            println!("{}  {}  {}  {}  {}  {}  {}", print_piece(self.board[0][i]), print_piece(self.board[1][i]),
+                     print_piece(self.board[2][i]), print_piece(self.board[3][i]), print_piece(self.board[4][i]),
+                     print_piece(self.board[5][i]), print_piece(self.board[6][i]));
+        }
         println!("____________________");
     }
 
@@ -128,6 +115,7 @@ impl ConGame
     fn check_win(&mut self, col: usize, row: usize, player: Piece) -> bool
     {
         let mut in_row = 1;
+
         if col != 0 {
             for i in (0..=col - 1).rev() //horizontal
                 {
