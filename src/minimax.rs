@@ -39,11 +39,12 @@ pub fn minimax_search<G>(game: &G, depth: usize, is_opponent: bool) -> Option<G:
             }
         } else {
             // Choose first available move.
-            let moves = game.possible_moves();
-            if moves.len() == 0 {
-                return None;
-            }
-            return Some(moves[0].clone());
+            let mut moves = game.possible_moves();
+            // if moves.len() == 0 {
+            //     return None;
+            // }
+            // return Some(moves[0].clone());
+            return moves.next();
         }
         //println!("{}",best_move.1);
         best_move.0 // Return the move that corresponds with best heuristic

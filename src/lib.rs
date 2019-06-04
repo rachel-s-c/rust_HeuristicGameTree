@@ -20,7 +20,7 @@ pub trait HeuristicGameTree: Clone {
     /// All the possible moves that the computer agent and player can make based on the existing
     /// game board are determined with this function.
     /// Returns an iterator, where all the items are possible moves
-    fn possible_moves(&self) -> Vec<Self::Move>;
+    fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_>;
 
     /// The computation of heuristics differ with the type of game
     /// This makes the individually unique heuristics into a value of type isize

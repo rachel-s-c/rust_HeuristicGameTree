@@ -21,7 +21,7 @@ impl<'a> HeuristicGameTree for TicGame {
     type Move = usize;
     //type Heuristic = isize;
     // fn possible_moves(&self) -> Iterator<Item = Self::Move> {
-    fn possible_moves(&self) -> Vec<Self::Move> {
+    fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
         let mut list = Vec::new();
         for i in 0..9 {
             if self.board[i].is_none() {
@@ -29,7 +29,7 @@ impl<'a> HeuristicGameTree for TicGame {
             }
         }
         // list.iter()
-        list
+        Box::new(list.into_iter())
     }
 
     fn heuristic(&self) -> isize {

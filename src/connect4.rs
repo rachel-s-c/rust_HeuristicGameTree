@@ -7,14 +7,14 @@ use crate::minimax;
 
 impl<'a> HeuristicGameTree for ConGame {
     type Move = usize;
-    fn possible_moves(&self) -> Vec<Self::Move> {
+    fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
         let mut list = Vec::new();
         for i in 0..7 {
             if self.board[i][5].is_none() {
                 list.push(i);
             }
         }
-        list
+        Box::new(list.into_iter())
     }
     fn heuristic(&self) -> isize {
         let mut x_streak = 0;
