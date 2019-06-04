@@ -34,21 +34,31 @@ impl<'a> HeuristicGameTree for ConGame {
                 }
             }
         }
-
-        'outer2: for a in 0..6 {
-            for b in 0..5 {
-                if mutableself.board[a][b] == Some(Piece::O) {
-                    let cur = mutableself.check_win_and_length(a, b, Piece::O).1;
-                    o_streak = max(cur, o_streak);
-                    if o_streak >= 4
-                    {
-                        o_streak = 4;
-                        break 'outer2;
+            'outer2: for a in 0..6 {
+                for b in 0..5 {
+                    if mutableself.board[a][b] == Some(Piece::O) {
+                        let cur = mutableself.check_win_and_length(a, b, Piece::O).1;
+                        o_streak = max(cur, o_streak);
+                        if o_streak >= 4
+                        {
+                            o_streak = 4;
+                            break 'outer2;
+                        }
                     }
                 }
             }
+
+        if x_streak == 4
+        {
+            100
         }
+        else if o_streak == 4
+        {
+            -100
+        }
+        else {
             x_streak - o_streak
+        }
 
     }
     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
