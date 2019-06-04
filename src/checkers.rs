@@ -291,7 +291,13 @@ impl<'a> CheckersGame {
 24    25    26    27
    28    29    30    31
 */
-
+/// Starts the Checkers game
+/// # Arguments
+///
+/// * `difficulty` - A usize that holds the difficulty of the game. This value is passed as
+///                  an argument to minimax search, determining the depth of the minimax search
+///                  tree (i.e. the number of steps ahead that the AI agent should look ahead when
+///                  determining its move)
 pub fn start_checkers(_difficulty: usize) {
     let game = CheckersGame::new();
     game.print_board();
