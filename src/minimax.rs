@@ -68,12 +68,12 @@ fn minimax_helper<G>(game: &G, depth: usize, is_opponent: bool, mut alpha: isize
             if (h > child_heuristic && is_opponent) || (h < child_heuristic && !is_opponent) {
                 child_heuristic = h;
             }
-            if is_opponent && h > alpha {
+            if is_opponent && h <= alpha {
                 alpha = h;
-            } else if !is_opponent && h > beta {
+            } else if !is_opponent && h < beta {
                 beta = h;
             }
-            if beta < alpha {
+            if beta <= alpha {
                 break;
             }
         }
