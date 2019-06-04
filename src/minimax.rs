@@ -60,26 +60,26 @@ fn minimax_helper<G>(game: &G, depth: usize, is_opponent: bool, mut alpha: isize
     let mut current_heuristic = game.heuristic();
     if depth > 0 {
         // End of depth, return
-        // let mut child_heuristic = if is_opponent { MIN } else { MAX };
+        let mut child_heuristic = if is_opponent { MIN } else { MAX };
         for mymove in game.possible_moves() {
             let mut next_state = game.clone();
             let opp = next_state.execute_move(&mymove.clone(), is_opponent);
             let h = minimax_helper(&next_state,depth - 1, opp, alpha, beta);
-            if (h > current_heuristic && is_opponent) || (h < current_heuristic && !is_opponent) {
-                current_heuristic = h;
+            if (h > child_heuristic && is_opponent) || (h < child_heuristic && !is_opponent) {
+                child_heuristic = h;
             }
             if is_opponent && h > alpha {
                 alpha = h;
-            } else if !is_opponent && h < beta {
+            } else if !is_opponent && h > beta {
                 beta = h;
             }
             if beta < alpha {
                 break;
             }
         }
-        // if (child_heuristic > MIN && is_opponent) || (child_heuristic < MAX && !is_opponent) {
-        //     current_heuristic = child_heuristic;
-        // }
+        if (child_heuristic > MIN && is_opponent) || (child_heuristic < MAX && !is_opponent) {
+            current_heuristic = child_heuristic;
+        }
     }
     current_heuristic
 }
