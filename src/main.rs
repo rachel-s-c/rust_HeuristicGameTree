@@ -1,4 +1,4 @@
-use std::io::{stdin, stdout, Write};
+use std::io::{stdout, Write};
 use std::{env, process};
 
 pub mod checkers;
@@ -29,7 +29,7 @@ fn read_input() -> (String, String) {
     });
     let difficulty = "".to_owned();
     if let Some(arg2) = env::args().nth(2) {
-        let difficulty = arg2;
+        let _difficulty = arg2;
     }
     (game, difficulty)
 }

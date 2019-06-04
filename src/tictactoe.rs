@@ -1,6 +1,5 @@
 use crate::general_game::print_piece;
 use crate::general_game::{HeuristicGameTree, Piece};
-use std::cmp::max;
 use std::io::{stdin, stdout, Write};
 
 const TICWINS: [[usize; 3]; 8] = [
@@ -116,16 +115,6 @@ impl<'a> TicGame {
             lengths.push(in_row);
         }
         (false, *lengths.iter().max().unwrap())
-    }
-
-    fn move_count(&self) -> usize {
-        let mut count = 0;
-        for piec in self.board.iter() {
-            if piec.is_some() {
-                count += 1;
-            }
-        }
-        count
     }
 
     fn board_not_full(&self) -> bool {
