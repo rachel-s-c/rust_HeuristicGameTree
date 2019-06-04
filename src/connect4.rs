@@ -1,7 +1,8 @@
 use crate::general_game::print_piece;
-use crate::general_game::{HeuristicGameTree, Piece};
+use crate::general_game::Piece;
 use std::cmp::max;
 use std::io::{stdin, stdout, Write};
+use super::*;
 
 impl<'a> HeuristicGameTree for ConGame {
     type Move = usize;

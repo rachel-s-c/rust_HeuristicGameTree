@@ -1,45 +1,18 @@
 
 use std::f64::INFINITY;
 
+
 #[allow(unused)]
 pub trait HeuristicGameTree {
     type Game;
     type Move;
     type Heuristic;
 
-    /// All the possible moves that the computer agent and player can make based on the existing
-    /// game board are determined with this function.
-    /// Returns an iterator, where all the items are possible moves
-    fn possible_moves(&self) -> impl Iter<Item = Move>;
 
 
-    /// The computation of heuristics differ with the type of game
-    /// This makes the individually unique heuristics into a generic Heuristic type
-    fn heuristic(&self) -> Heuristic;
-
-
-    /// After determining the best move to make, the computer agent will execute the move
-    /// The game is updated with the computer agent's move and returns true if the next player is the opponent
-    /// The player is now free to make their turn
-    fn execute_move(&mut self) -> bool;
-
-
-    /// Function: Minimax with alpha-beta pruning
-    /// Gets the possible moves (i.e. children)
-    /// Makes executes each move on a copy of the game
-    /// Gets the heuristic of each game copy executed on a next move by calling minimax again
-    ///
-    /// # Arguments
-    /// * `depth` - A usize that holds the depth of the minimax tree
-    ///             (it is the number of moves that the computer agent will plan ahead, and it
-    ///             represents the the difficulty of the game)
-    ///
-    /// * `is_opponent` - A boolean that represents whether it is the player or computer's turn
-    ///
-    /// Returns the best move (i.e. the move corresponding to the best heuristic)
-    fn minimax_search(&self, depth: usize, is_opponent: bool,) -> Move {
-    }
 }
+
+
 
 
 /// Each unique position on the game board
@@ -79,7 +52,15 @@ impl Position {
 }
 
 
-/*
+
+
+
+
+
+
+
+
+
 // supposing we pass this function a hashmap, where the key is the move, and the value is the
 // vector of all the possible next steps that can be reached from this move
 // returns the position and its score
@@ -134,4 +115,3 @@ pub fn minimax(depth: usize, is_maximizing_player: bool, pos: Position,
     }
 }
 
-*/

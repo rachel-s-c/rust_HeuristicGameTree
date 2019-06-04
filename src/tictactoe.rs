@@ -1,6 +1,7 @@
 use crate::general_game::print_piece;
-use crate::general_game::{HeuristicGameTree, Piece};
+use crate::general_game::Piece;
 use std::io::{stdin, stdout, Write};
+use super::*;
 
 const TICWINS: [[usize; 3]; 8] = [
     [0, 1, 2],
