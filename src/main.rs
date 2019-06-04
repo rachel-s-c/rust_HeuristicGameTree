@@ -1,10 +1,9 @@
 use std::io::{stdout, Write};
 use std::{env, process};
 
-pub mod checkers;
-pub mod connect4;
-pub mod general_game;
-pub mod tictactoe;
+
+use heuristic_game_tree::general_game;
+
 
 fn main() -> std::io::Result<()> {
     //let (game_num, difficulty_num) = choose_game(read_input().0, read_input().1);
