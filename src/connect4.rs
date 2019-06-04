@@ -50,11 +50,11 @@ impl<'a> HeuristicGameTree for ConGame {
 
         if x_streak == 4
         {
-            100
+            x_streak
         }
         else if o_streak == 4
         {
-            -100
+            -o_streak
         }
         else {
             x_streak - o_streak
