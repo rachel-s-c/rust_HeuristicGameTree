@@ -36,70 +36,14 @@ impl<'a> HeuristicGameTree for TicGame {
         let mut x_streak = if self.move_count() > 0 { 1 } else { 0 };
         let mut o_streak = if self.move_count() > 1 { 1 } else { 0 };
         // First check for wins
-        if self.board[4].is_some() {
-            let center = self.board[4].clone();
-            if center == self.board[0] && center == self.board[8] {
-                if center == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
-            if center == self.board[1] && center == self.board[7] {
-                if center == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
-            if center == self.board[2] && center == self.board[6] {
-                if center == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
-            if center == self.board[3] && center == self.board[5] {
-                if center == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
+        if self.clone().check_win(Piece::X)
+        {
+            x_streak = 3;
         }
-        if self.board[0].is_some() {
-            let corner = self.board[0].clone();
-            if corner == self.board[1] && corner == self.board[2] {
-                if corner == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
-            if corner == self.board[3] && corner == self.board[6] {
-                if corner == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
-        }
-        if self.board[8].is_some() {
-            let corner = self.board[8].clone();
-            if corner == self.board[5] && corner == self.board[2] {
-                if corner == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
-            if corner == self.board[7] && corner == self.board[6] {
-                if corner == Some(Piece::X) {
-                    x_streak = 3;
-                } else {
-                    o_streak = 3;
-                }
-            }
+
+        if self.clone().check_win(Piece::O)
+        {
+            o_streak = 3;
         }
         // Do pairs
         if self.board[4].is_some() {
