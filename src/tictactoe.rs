@@ -1,5 +1,4 @@
 use crate::general_game::print_piece;
-use std::isize::{MAX,MIN};
 use crate::general_game::Piece;
 use std::io::{stdin, stdout, Write};
 use super::*;
@@ -35,7 +34,7 @@ impl<'a> HeuristicGameTree for TicGame {
     fn heuristic(&self) -> isize {
         // invariant: x_streak != o_streak != 3
         // keep track of best streak by each player
-        let mut x_streak = self.clone().check_win(Piece::X).1;
+        let x_streak = self.clone().check_win(Piece::X).1;
         let o_streak = self.clone().check_win(Piece::O).1;
         o_streak - x_streak
     }

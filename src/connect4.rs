@@ -27,7 +27,6 @@ impl<'a> HeuristicGameTree for ConGame {
                     let cur = mutableself.check_win_and_length(a, b, Piece::X).1;
                     x_streak = max(cur, x_streak);
                     if x_streak >= 4 {
-                        x_streak == 4;
                         break 'outer;
                     }
                 }
@@ -40,13 +39,12 @@ impl<'a> HeuristicGameTree for ConGame {
                     let cur = mutableself.check_win_and_length(a, b, Piece::O).1;
                     o_streak = max(cur, o_streak);
                     if o_streak >= 4 {
-                        o_streak == 4;
                         break 'outer2;
                     }
                 }
             }
         }
-            x_streak - o_streak
+            o_streak - x_streak
 
     }
     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
