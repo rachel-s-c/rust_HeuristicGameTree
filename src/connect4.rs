@@ -42,15 +42,16 @@ impl<'a> HeuristicGameTree for ConGame {
                 }
             }
         }
-        x_streak - o_streak // Why is this backwards?
+        o_streak - x_streak
     }
-    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) {
+    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
         let (_val, loc) = self.clone().validmove(next_move + 1);
         self.store_move(
             *next_move,
             loc,
-            if is_opponent { Piece::O } else { Piece::X },
+            if is_opponent { Piece::X } else { Piece::O },
         );
+        !is_opponent
     }
 }
 
@@ -328,22 +329,22 @@ mod con_tests {
 
     #[test]
     fn valid_con_test() {
-        let mut con_1 = ConGame::new();
-        let (a, b) = con_1.validmove(5);
+        let con_1 = ConGame::new();
+        let (a, _b) = con_1.validmove(5);
         assert!(a);
     }
 
     #[test]
     fn validrow_con_test() {
-        let mut con_1 = ConGame::new();
-        let (a, b) = con_1.validmove(5);
+        let con_1 = ConGame::new();
+        let (_a, b) = con_1.validmove(5);
         assert_eq!(b, 0);
     }
 
     #[test]
     fn invalid_con_test() {
-        let mut con_1 = ConGame::new();
-        let (a, b) = con_1.validmove(8);
+        let con_1 = ConGame::new();
+        let (a, _b) = con_1.validmove(8);
         assert!(!a);
     }
 

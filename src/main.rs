@@ -24,7 +24,7 @@ fn main() -> std::io::Result<()> {
 
 fn read_input() -> (String, String) {
     let game = env::args().nth(1).unwrap_or_else(|| {
-        eprintln!("Error. Please provide a proper game name and run again");
+        eprintln!("Error. Please provide a proper game name and run again\nSyntax: game difficulty");
         ::std::process::exit(1);
     });
     let difficulty = "".to_owned();

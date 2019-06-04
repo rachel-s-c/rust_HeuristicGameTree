@@ -19,9 +19,9 @@ pub trait HeuristicGameTree {
 
 
     /// After determining the best move to make, the computer agent will execute the move
-    /// The game is updated with the computer agent's move
+    /// The game is updated with the computer agent's move and returns true if the next player is the opponent
     /// The player is now free to make their turn
-    fn execute_move(&mut self);
+    fn execute_move(&mut self) -> bool;
 
 
     /// Function: Minimax with alpha-beta pruning
