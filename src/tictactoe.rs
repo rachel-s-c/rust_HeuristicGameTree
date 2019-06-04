@@ -2,6 +2,8 @@ use crate::general_game::print_piece;
 use crate::general_game::Piece;
 use std::io::{stdin, stdout, Write};
 use super::*;
+use crate::minimax;
+
 
 const TICWINS: [[usize; 3]; 8] = [
     [0, 1, 2],
@@ -129,6 +131,13 @@ impl<'a> TicGame {
     }
 }
 
+/// Starts the Tic-tac-toe game
+/// # Arguments
+///
+/// * `difficulty` - A usize that holds the difficulty of the game. This value is passed as
+///                  an argument to minimax search, determining the depth of the minimax search
+///                  tree (i.e. the number of steps ahead that the AI agent should look ahead when
+///                  determining its move)
 pub fn start_tic(difficulty: usize) {
     let mut new_game = TicGame::new();
 
@@ -151,7 +160,7 @@ pub fn start_tic(difficulty: usize) {
                 if new_game.check_win(Piece::X).0 {
                     new_game.winner = Some(Piece::X);
                 } else {
-                    let next_move = new_game.minimax_search(difficulty * 3, true);
+                    let next_move = minimax::minimax_search(&new_game, difficulty * 3, true);
                     if let Some(m) = next_move {
                         new_game.store_move(m, Piece::O);
                         if new_game.check_win(Piece::O).0 {

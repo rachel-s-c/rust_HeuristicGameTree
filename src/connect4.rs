@@ -3,6 +3,7 @@ use crate::general_game::Piece;
 use std::cmp::max;
 use std::io::{stdin, stdout, Write};
 use super::*;
+use crate::minimax;
 
 impl<'a> HeuristicGameTree for ConGame {
     type Move = usize;
@@ -255,6 +256,13 @@ impl ConGame {
     }
 }
 
+/// Starts the Connect4 game
+/// # Arguments
+///
+/// * `difficulty` - A usize that holds the difficulty of the game. This value is passed as
+///                  an argument to minimax search, determining the depth of the minimax search
+///                  tree (i.e. the number of steps ahead that the AI agent should look ahead when
+///                  determining its move)
 pub fn start_con(difficulty: usize) {
     let mut new_game = ConGame::new();
 
@@ -276,7 +284,7 @@ pub fn start_con(difficulty: usize) {
                 if new_game.check_win_and_length(col - 1, row, Piece::X).0 {
                     new_game.winner = Some(Piece::X);
                 } else {
-                    let next_move = new_game.minimax_search(difficulty * 8, true);
+                    let next_move = minimax::minimax_search(&new_game, difficulty * 8, true);
                     if let Some(m) = next_move {
                         let (_val, loc) = new_game.clone().validmove(m + 1);
                         new_game.store_move(m, loc, Piece::O);
