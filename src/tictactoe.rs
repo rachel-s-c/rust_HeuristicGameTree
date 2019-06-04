@@ -28,77 +28,12 @@ impl<'a> HeuristicGameTree for TicGame {
         // list.iter()
         list
     }
-    // MAKE THIS BETTER
+
     fn heuristic(&self) -> isize {
         // invariant: x_streak != o_streak != 3
         // keep track of best streak by each player
-        //
-        let mut x_streak = if self.move_count() > 0 { 1 } else { 0 };
-        let mut o_streak = if self.move_count() > 1 { 1 } else { 0 };
-        // First check for wins
-        if self.clone().check_win(Piece::X)
-        {
-            x_streak = 3;
-        }
-
-        if self.clone().check_win(Piece::O)
-        {
-            o_streak = 3;
-        }
-        // Do pairs
-        if self.board[4].is_some() {
-            let center = self.board[4].clone();
-            for i in 0..9 {
-                if i != 4 && center == self.board[i] {
-                    // found a pair
-                    if center == Some(Piece::X) {
-                        x_streak = max(x_streak, 2);
-                    } else {
-                        o_streak = max(o_streak, 2);
-                    }
-                }
-            }
-        }
-        let corner = self.board[0].clone();
-        if self.board[0].is_some() {
-            if corner == self.board[1] || corner == self.board[3] {
-                if corner == Some(Piece::X) {
-                    x_streak = max(x_streak, 2);
-                } else {
-                    o_streak = max(o_streak, 2);
-                }
-            }
-        }
-        if self.board[2].is_some() {
-            // let corner = self.board[0].clone();
-            if corner == self.board[1] || corner == self.board[5] {
-                if corner == Some(Piece::X) {
-                    x_streak = max(x_streak, 2);
-                } else {
-                    o_streak = max(o_streak, 2);
-                }
-            }
-        }
-        if self.board[6].is_some() {
-            //  let corner = self.board[0].clone();
-            if corner == self.board[7] || corner == self.board[3] {
-                if corner == Some(Piece::X) {
-                    x_streak = max(x_streak, 2);
-                } else {
-                    o_streak = max(o_streak, 2);
-                }
-            }
-        }
-        if self.board[8].is_some() {
-            //  let corner = self.board[0].clone();
-            if corner == self.board[7] || corner == self.board[5] {
-                if corner == Some(Piece::X) {
-                    x_streak = max(x_streak, 2);
-                } else {
-                    o_streak = max(o_streak, 2);
-                }
-            }
-        }
+        let x_streak = self.clone().check_win(Piece::X).1;
+        let o_streak = self.clone().check_win(Piece::O).1;
         x_streak - o_streak // Why is this backwards?
     }
     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) {
@@ -166,7 +101,8 @@ impl<'a> TicGame {
         self.board[position] = Some(player);
     }
 
-    fn check_win(&mut self, player: Piece) -> bool {
+    fn check_win(&mut self, player: Piece) -> (bool, isize) {
+        let mut lengths = Vec::new();
         for vecs in TICWINS.iter() {
             let mut in_row = 0;
             for index in vecs.iter() {
@@ -175,10 +111,11 @@ impl<'a> TicGame {
                 }
             }
             if in_row == 3 {
-                return true;
+                return (true, 3);
             }
+            lengths.push(in_row);
         }
-        false
+        (false, *lengths.iter().max().unwrap())
     }
 
     fn move_count(&self) -> usize {
@@ -220,13 +157,13 @@ pub fn start_tic(difficulty: usize) {
             if valid {
                 // pos is our move, store_move is our execute
                 new_game.store_move(pos, Piece::X);
-                if new_game.check_win(Piece::X) {
+                if new_game.check_win(Piece::X).0 {
                     new_game.winner = Some(Piece::X);
                 } else {
                     let next_move = new_game.minimax_search(difficulty * 3, true);
                     if let Some(m) = next_move {
                         new_game.store_move(m, Piece::O);
-                        if new_game.check_win(Piece::O) {
+                        if new_game.check_win(Piece::O).0 {
                             new_game.winner = Some(Piece::O);
                         }
                     }
