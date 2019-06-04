@@ -4,9 +4,17 @@ use core::isize::{MAX, MIN};
 
 
 /// Function: Minimax with alpha-beta pruning.
-/// Gets the possible moves (i.e. children).
-/// Makes executes each move on a copy of the game.
-/// Gets the heuristic of each game copy executed on a next move by calling minimax again
+/// Minimax is a decision rule that minimizes the possible loss for a worst case (maximum loss) scenario,
+/// and maximizes the possible gain for a best case (maximum win) scenario. This function is
+/// deterministic and does not take into account uncertainty (random chance elements).
+///
+/// This function gets all the possible moves (i.e. children), then executes each move on a
+/// copy of the game. It gets the heuristic of each game copy executed on a next move by calling
+/// minimax recursively.
+///
+/// The game tree is cut off at a certain maximum depth, d (called a d-ply search), depending on the
+/// difficulty rating picked by the player. The heuristic function to those positions are at the
+/// bottom nodes of the tree, so instead of just Win, Loss, Tie, there is a heuristic score.
 ///
 /// # Arguments
 /// * `depth` - A usize that holds the depth of the minimax tree

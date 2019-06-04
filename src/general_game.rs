@@ -2,6 +2,14 @@ use crate::checkers::start_checkers;
 use crate::connect4::start_con;
 use crate::tictactoe::start_tic;
 
+/// Starts the game after the player runs the program with the selected game.
+/// Available options are Tic-tac-toe, Connect4, and Checkers.
+/// # Arguments
+/// * `game` - A usize that holds the number corresponding to the game type
+/// * `diff` - A usize that holds the difficulty of the game, which is either the default setting
+///            (medium, corresponding to the number 2), or a difficulty setting that has been chosen
+///            by the player (easy 1, medium 2, hard 3).
+///
 pub fn lets_play(game: usize, diff: usize) {
     match game {
         1 => start_tic(diff),
@@ -11,8 +19,12 @@ pub fn lets_play(game: usize, diff: usize) {
     }
 }
 #[derive(PartialEq, Copy, Clone, Debug)]
+/// Game pieces for a two-player game where all the pieces have equal value.
+/// Used in games such as Tic-tac-toe, Connect4, Mancala, etc.
 pub enum Piece {
+    /// An 'X' piece
     X,
+    /// An 'O' piece
     O,
 }
 
@@ -33,6 +45,13 @@ impl Piece {
     }
 }
 
+/// Prints the game piece on the game board.
+///
+/// # Arguments
+/// * `item` - Of type Option<Piece>, where it is either a None, or it holds an 'X' or 'O' game
+/// Piece. If it is a Some(X) or Some(O), then the content is unwrapped and printed.
+///
+/// Returns a reference to a string, which is the element that is printed on the board.
 pub fn print_piece<'a>(item: Option<Piece>) -> &'a str {
     if item.is_none() {
         return " ";
