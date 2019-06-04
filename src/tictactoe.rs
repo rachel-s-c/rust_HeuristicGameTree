@@ -36,6 +36,7 @@ impl<'a> HeuristicGameTree for TicGame {
         // keep track of best streak by each player
         let x_streak = self.clone().check_win(Piece::X).1;
         let o_streak = self.clone().check_win(Piece::O).1;
+
         o_streak - x_streak
     }
     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{

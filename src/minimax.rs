@@ -23,8 +23,8 @@ pub fn minimax_search<G>(game: &G, depth: usize, is_opponent: bool) -> Option<G:
         if depth > 0 {
             for mymove in game.possible_moves() {
                 let mut next_state = game.clone();
-                let opp = next_state.execute_move(&mymove.clone(), is_opponent); // Need to clone, standard procedure with minimax
-                let h = minimax_helper(game,depth - 1, opp, MAX, MIN);
+                let opp = next_state.execute_move(&mymove, is_opponent); // Need to clone, standard procedure with minimax
+                let h = minimax_helper(&next_state,depth - 1, opp, MAX, MIN);
                 if h > best_move.1 {
                     best_move = (Some(mymove), h);
                 }
