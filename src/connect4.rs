@@ -272,6 +272,7 @@ impl ConGame {
 }
 
 /// Starts the Connect4 game
+///
 /// # Arguments
 ///
 /// * `difficulty` - A usize that holds the difficulty of the game. This value is passed as

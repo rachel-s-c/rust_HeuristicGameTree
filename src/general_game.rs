@@ -3,6 +3,7 @@ use crate::connect4::start_con;
 use crate::tictactoe::start_tic;
 
 /// Starts the game after the player runs the program with the selected game.
+///
 /// Available options are Tic-tac-toe, Connect4, and Checkers.
 /// # Arguments
 /// * `game` - A usize that holds the number corresponding to the game type
@@ -20,6 +21,7 @@ pub fn lets_play(game: usize, diff: usize) {
 }
 #[derive(PartialEq, Copy, Clone, Debug)]
 /// Game pieces for a two-player game where all the pieces have equal value.
+///
 /// Used in games such as Tic-tac-toe, Connect4, Mancala, etc.
 pub enum Piece {
     /// An 'X' piece

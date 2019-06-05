@@ -6,6 +6,8 @@ pub mod minimax;
 
 
 #[allow(unused)]
+/// Game tree of possible moves with values of heuristic evaluations.
+///
 /// A heuristic is an approximation that is typically fast and used to aid in optimization problems.
 /// In this context, heuristics are used to “rate” board positions based on local information.
 /// It provides an informed way to guess which neighbor of a node will lead to a goal.

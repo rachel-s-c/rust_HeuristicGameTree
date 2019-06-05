@@ -132,6 +132,7 @@ impl<'a> TicGame {
 }
 
 /// Starts the Tic-tac-toe game
+///
 /// # Arguments
 ///
 /// * `difficulty` - A usize that holds the difficulty of the game. This value is passed as
