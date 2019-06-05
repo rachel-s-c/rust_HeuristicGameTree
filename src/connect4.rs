@@ -299,7 +299,7 @@ pub fn start_con(difficulty: usize) {
                 if new_game.check_win_and_length(col - 1, row, Piece::X).0 {
                     new_game.winner = Some(Piece::X);
                 } else {
-                    let next_move = minimax::minimax_search(&new_game, difficulty * 8, true);
+                    let next_move = minimax::minimax_search(&new_game, 3 * difficulty, true);
                     if let Some(m) = next_move {
                         let (_val, loc) = new_game.clone().validmove(m + 1);
                         new_game.store_move(m, loc, Piece::O);
