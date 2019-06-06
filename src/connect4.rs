@@ -128,13 +128,7 @@ impl ConGame {
         lengths.push(self.lef_diag(col, row, player));
         lengths.push(self.right_diag(col, row, player));
         let longest = *lengths.iter().max().unwrap();
-        let win = {
-            if longest >= 4 {
-                true
-            } else {
-                false
-            }
-        };
+        let win = longest >= 4;
         (win, longest)
     }
 
@@ -142,7 +136,7 @@ impl ConGame {
         let mut in_row = 1;
 
         if col != 0 {
-            for i in (0..=col - 1).rev() {
+            for i in (0..col).rev() {
                 if self.board[i][row] == Some(player) {
                     in_row += 1;
                 } else {
@@ -166,7 +160,7 @@ impl ConGame {
         let mut in_row = 1;
 
         if row != 0 {
-            for i in (0..=row - 1).rev() {
+            for i in (0..row).rev() {
                 if self.board[col][i] == Some(player) {
                     in_row += 1;
                 } else {

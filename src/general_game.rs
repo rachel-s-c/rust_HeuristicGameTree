@@ -31,14 +31,14 @@ pub enum Piece {
 }
 
 impl Piece {
-    fn is_x(&self) -> bool {
+    fn is_x(self) -> bool {
         if let Piece::X = self {
             true
         } else {
             false
         }
     }
-    fn is_o(&self) -> bool {
+    fn is_o(self) -> bool {
         if let Piece::O = self {
             true
         } else {
@@ -61,7 +61,7 @@ pub fn print_piece<'a>(item: Option<Piece>) -> &'a str {
     if item.unwrap().is_x() {
         return "X";
     }
-    return "O";
+    "O"
 }
 
 

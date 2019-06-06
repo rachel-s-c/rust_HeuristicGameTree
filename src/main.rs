@@ -37,7 +37,6 @@ fn choose_game(game: String) -> usize {
     //let difficulty_num = difficulty_level(difficulty);
 
     let game = game.to_lowercase();
-    let game_num = {
         if game.contains("tic") {
             1
         } else if game.contains("connect4") {
@@ -48,14 +47,11 @@ fn choose_game(game: String) -> usize {
             eprintln!("Sorry, we do not offer that game! BYE!");
             process::exit(1);
         }
-    };
-    game_num
 }
 
 fn difficulty_level(difficulty: String) -> usize {
     let _ = stdout().flush();
     let difficulty = difficulty.to_lowercase();
-    let difficulty_num = {
         if difficulty.contains("easy") {
             1
         } else if difficulty.contains("med") {
@@ -65,8 +61,6 @@ fn difficulty_level(difficulty: String) -> usize {
         } else {
             2
         }
-    };
-    difficulty_num
 }
 
 #[cfg(test)]
@@ -122,25 +116,4 @@ mod start_tests {
     fn choose_game_check_cap() {
         assert_eq!(choose_game("CHECKERS".to_owned()), 3);
     }
-}
-fn choose_game2(game: String) -> usize {
-    //let difficulty_num = difficulty_level(difficulty);
-
-    let game = game.to_lowercase();
-    let game_num = {
-        if game.contains("tic") {
-            1
-        } else if game.contains("connect4") {
-            2
-        } else if game.contains("checkers") {
-            3
-        } else {
-            eprintln!(
-                "Sorry, we do not offer that game! Please run the program again with either \
-                 tictactoe, checkers or connect4!"
-            );
-            process::exit(1);
-        }
-    };
-    game_num
 }
