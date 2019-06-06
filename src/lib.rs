@@ -36,14 +36,18 @@ pub mod minimax;
 ///}
 /// impl HeuristicGameTree for Connect4Game{
 ///     type Move = usize;
+///
+///     // Returns a box that contains a pointer to an iterator of all the moves that can be made
 ///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
 ///        let mut list = Vec::new();
-///        for i in 0..7 {
-///                list.push(i);
-///        }
+///        for i in 0..7 { list.push(i);}
 ///        Box::new(list.into_iter())
 /// }
+///
+///     // Returns the value of the heuristic that determines if the move is advantageous.
 ///     fn heuristic(&self) -> isize {4}
+///
+///     // Returns whether the move has been made.
 ///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{true}
 /// }
 /// ```

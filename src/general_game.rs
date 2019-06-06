@@ -54,6 +54,24 @@ impl Piece {
 /// Piece. If it is a Some(X) or Some(O), then the content is unwrapped and printed.
 ///
 /// Returns a reference to a string, which is the element that is printed on the board.
+///
+/// # Example
+/// ```
+/// # use heuristic_game_tree::general_game::print_piece;
+/// # use heuristic_game_tree::general_game::Piece;
+///
+/// let x = Some(Piece::X);
+/// let print = print_piece(x);
+/// assert_eq!(print, "X")
+/// ```
+///
+/// ```
+/// # use heuristic_game_tree::general_game::print_piece;
+/// let x = None;
+/// let print = print_piece(x);
+/// assert_eq!(print, " ")
+///
+/// ```
 pub fn print_piece<'a>(item: Option<Piece>) -> &'a str {
     if item.is_none() {
         return " ";
