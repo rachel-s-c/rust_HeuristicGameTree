@@ -22,10 +22,10 @@ pub mod minimax;
 /// // `derive` implements HeuristicGameTree for Games.
 /// #[derive(HeuristicGameTree)]
 /// enum Games {
-///    mancala,
-///    chess,
-///    tictactoe,
-///    checkers
+///    Mancala,
+///    Chess,
+///    TicTacToe,
+///    Checkers
 /// }
 /// ```
 ///
@@ -38,13 +38,25 @@ pub mod minimax;
 ///     type Move = usize;
 ///
 ///     /// Returns a box that contains a pointer to an iterator of all the possible moves
-///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {}
+///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
+///        let mut list = Vec::new();
+///        for i in 0..7 {
+///            if self.board[i][5].is_none() {
+///                list.push(i);
+///            }
+///        }
+///        Box::new(list.into_iter())
+///     }
 ///
 ///     /// Returns an isize that represents the heuristic value (i.e. how good/bad the move is)
-///     fn heuristic(&self) -> isize {}
+///     fn heuristic(&self) -> isize {
+///         4
+///     }
 ///
 ///     /// Returns a boolean affirming/ denying whether the move has been made
-///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{}
+///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
+///         true
+///     }
 /// }
 /// ```
 pub trait HeuristicGameTree: Clone {
