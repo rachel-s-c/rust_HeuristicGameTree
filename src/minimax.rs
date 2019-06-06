@@ -28,7 +28,53 @@ use core::isize::{MAX, MIN};
 /// # Examples
 /// Basic usage:
 /// ```
-/// //let next_move = minimax::minimax_search(&new_game, 3 * difficulty, true);
+/// #[derive(PartialEq, Copy, Clone, Debug)]
+/// pub enum Piece {
+///    /// An 'X' piece
+///    X,
+///    /// An 'O' piece
+///    O,
+///}
+/// #[derive(Clone)]
+/// struct Connect4Game {
+///    board: [[Option<Piece>; 6]; 7],
+///    winner: Option<Piece>,
+/// }
+/// impl Connect4Game {
+///    fn new() -> Self {
+///        Connect4Game {
+///            board: [[None; 6]; 7],
+///            winner: None,
+///        }
+///    }
+/// }
+/// # use heuristic_game_tree::HeuristicGameTree;
+/// impl HeuristicGameTree for Connect4Game{
+///     type Move = usize;
+///
+///     // Returns a box that contains a pointer to an iterator of all the moves that can be made
+///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
+///        let mut list = Vec::new();
+///        for i in 0..7 { list.push(i);}
+///        Box::new(list.into_iter())
+/// }
+///
+///     // Returns the value of the heuristic that determines if the move is advantageous.
+///     fn heuristic(&self) -> isize {4}
+///
+///     // Returns whether the move has been made.
+///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{true}
+/// }
+///
+/// # use heuristic_game_tree::minimax::minimax_search;
+/// let mut new_game = Connect4Game::new();
+/// let difficulty: usize = 2;
+/// let boolean = true;
+///
+/// // next_move is an Option<usize>
+/// // since we are beginning with an empty Connect4Game board, the best move is the first move (i.e. 0)
+/// let next_move = minimax_search(&new_game, 3 * difficulty, boolean);
+/// assert_eq!(0, next_move.unwrap());
 /// ```
 pub fn minimax_search<G>(game: &G, depth: usize, is_opponent: bool) -> Option<G::Move>
     where
