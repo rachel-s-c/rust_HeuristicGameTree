@@ -25,6 +25,11 @@ use core::isize::{MAX, MIN};
 ///
 /// Returns the best move (i.e. the move corresponding to the best heuristic)
 ///
+/// # Examples
+/// Basic usage:
+/// ```
+/// //let next_move = minimax::minimax_search(&new_game, 3 * difficulty, true);
+/// ```
 pub fn minimax_search<G>(game: &G, depth: usize, is_opponent: bool) -> Option<G::Move>
     where
         G: HeuristicGameTree{

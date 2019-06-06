@@ -38,13 +38,13 @@ pub mod minimax;
 ///     type Move = usize;
 ///
 ///     /// Returns a box that contains a pointer to an iterator of all the possible moves
-///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {...}
+///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {}
 ///
 ///     /// Returns an isize that represents the heuristic value (i.e. how good/bad the move is)
-///     fn heuristic(&self) -> isize {...}
+///     fn heuristic(&self) -> isize {}
 ///
 ///     /// Returns a boolean affirming/ denying whether the move has been made
-///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{...}
+///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{}
 /// }
 /// ```
 pub trait HeuristicGameTree: Clone {
