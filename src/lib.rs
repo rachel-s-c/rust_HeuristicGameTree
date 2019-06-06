@@ -15,50 +15,39 @@ pub mod minimax;
 /// the heuristic function is generally referred to as the evaluation function, or the static
 /// evaluator. The static evaluation takes in a board position, and gives it a score.
 /// The higher the score, the better it is for you, the lower, the better for the opponent.
-
-/// # Derivable
-/// This trait can be used with #[derive] if all fields are HeuristicGameTree.
-/// ```
-/// // `derive` implements HeuristicGameTree for Games.
-/// #[derive(HeuristicGameTree)]
-/// enum Games {
-///    Mancala,
-///    Chess,
-///    TicTacToe,
-///    Checkers
-/// }
-/// ```
 ///
 /// # How can I implement HeuristicGameTree?
 /// HeuristicGameTree requires the possible_moves, heuristic, execute_move methods to be implemented.
-/// An example implementation for a connect4 game is:
+/// An simple example implementation for a connect4 game is:
 /// ```
-/// use crate::heuristic_game_tree::HeuristicGameTree;
-/// impl<'a> HeuristicGameTree for Connect4Game {
-///     type Move = usize;
+/// use heuristic_game_tree::HeuristicGameTree;
 ///
-///     /// Returns a box that contains a pointer to an iterator of all the possible moves
+/// #[derive(PartialEq, Copy, Clone, Debug)]
+/// pub enum Piece {
+///    /// An 'X' piece
+///    X,
+///    /// An 'O' piece
+///    O,
+///}
+/// #[derive(Clone)]
+/// struct Connect4Game {
+///    board: [[Option<Piece>; 6]; 7],
+///    winner: Option<Piece>,
+///}
+/// impl HeuristicGameTree for Connect4Game{
+///     type Move = usize;
 ///     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
 ///        let mut list = Vec::new();
 ///        for i in 0..7 {
-///            if self.board[i][5].is_none() {
 ///                list.push(i);
-///            }
 ///        }
 ///        Box::new(list.into_iter())
-///     }
-///
-///     /// Returns an isize that represents the heuristic value (i.e. how good/bad the move is)
-///     fn heuristic(&self) -> isize {
-///         4
-///     }
-///
-///     /// Returns a boolean affirming/ denying whether the move has been made
-///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
-///         true
-///     }
+/// }
+///     fn heuristic(&self) -> isize {4}
+///     fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{true}
 /// }
 /// ```
+
 pub trait HeuristicGameTree: Clone {
     type Move: Clone + Sized;
     //type Heuristic: PartialOrd;
