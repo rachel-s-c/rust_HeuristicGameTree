@@ -102,7 +102,7 @@ impl<'a> CheckersGame {
             println!(
                 "{} {}   {}   {}   {}",
                 i * 2 + 1,
-                print_piece(&self.board[0 + i * 8]),
+                print_piece(&self.board[i * 8]),
                 print_piece(&self.board[1 + i * 8]),
                 print_piece(&self.board[2 + i * 8]),
                 print_piece(&self.board[3 + i * 8]),
@@ -242,15 +242,11 @@ impl<'a> CheckersGame {
                 pos.push((start, start - 3, None));
             }
         }
-        if start < BOARDSIZE - BOARDWIDTH / 2 {
-            if p.is_x() || p.is_king() {
-                pos.push((start, start + 4, None));
-            }
+        if start < BOARDSIZE - BOARDWIDTH / 2 && (p.is_x() || p.is_king()){
+			pos.push((start, start + 4, None));
         }
-        if start >= BOARDWIDTH / 2 {
-            if p.is_o() || p.is_king() {
-                pos.push((start, start - 4, None));
-            }
+        if start >= BOARDWIDTH / 2 && (p.is_o() || p.is_king()) {
+			pos.push((start, start - 4, None));
         }
         pos.into_iter()
             .filter(move |p| self.board[p.1].is_none())
@@ -324,7 +320,7 @@ impl<'a> HeuristicGameTree for CheckersGame {
             self.board[m.1] = self.board[m.0].clone();
             self.board[m.0] = None;
             self.maybe_make_king(m.1);
-            if self.possible_positions_jump(m.1).len() == 0 {
+            if self.possible_positions_jump(m.1).is_empty() {
                 // No jumps left from this piece, give over turn
                 self.is_o_turn = !self.is_o_turn;
             } else {
@@ -355,7 +351,7 @@ impl<'a> HeuristicGameTree for CheckersGame {
         }
         // Only look for nonjumps if no jumps are available
         // Also only look for nonjumps if we didn't just jump
-        if positions.len() == 0 && self.last_skip.is_none() {
+        if positions.is_empty() && self.last_skip.is_none() {
             for (i, start) in self.board.as_ref().iter().enumerate() {
                 if let Some(s) = start {
                     if self.is_o_turn == s.is_o() {
@@ -421,7 +417,7 @@ pub fn start_checkers(difficulty: usize) {
         if let Some(c) = loc.next() {
             let mut c = c as u8;
             if c > 96 {
-                c = c - 32;
+                c -= 32;
             }
             if c < 73 && c > 64 {
                 start += (c - 65 - (c - 1) % 2) / 2;
@@ -444,7 +440,7 @@ pub fn start_checkers(difficulty: usize) {
         if let Some(c) = loc.next() {
             let mut c = c as u8;
             if c > 96 {
-                c = c - 32;
+                c -= 32;
             }
             if c < 73 && c > 64 {
                 end += (c - 65 - (c - 1) % 2) / 2;
