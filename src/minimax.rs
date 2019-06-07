@@ -1,7 +1,5 @@
-
 use super::HeuristicGameTree;
 use core::isize::{MAX, MIN};
-
 
 /// Function: Minimax with alpha-beta pruning.
 /// Minimax is a decision rule that minimizes the possible loss for a worst case (maximum loss) scenario,
@@ -81,38 +79,45 @@ use core::isize::{MAX, MIN};
 /// assert_eq!(0, next_move.unwrap());
 /// ```
 pub fn minimax_search<G>(game: &G, depth: usize, is_opponent: bool) -> Option<G::Move>
-    where
-        G: HeuristicGameTree{
-        let mut best_move = (None, MIN); // We're going to maximize heuristic
-        if depth > 0 {
-            for mymove in game.possible_moves() {
-                let mut next_state = game.clone();
-                let opp = next_state.execute_move(&mymove, is_opponent); // Need to clone, standard procedure with minimax
-                let h = minimax_helper(&next_state,depth - 1, opp, MAX, MIN);
-                if h > best_move.1 {
-                    best_move = (Some(mymove), h);
-                }
+where
+    G: HeuristicGameTree,
+{
+    let mut best_move = (None, MIN); // We're going to maximize heuristic
+    if depth > 0 {
+        for mymove in game.possible_moves() {
+            let mut next_state = game.clone();
+            let opp = next_state.execute_move(&mymove, is_opponent); // Need to clone, standard procedure with minimax
+            let h = minimax_helper(&next_state, depth - 1, opp, MAX, MIN);
+            if h > best_move.1 {
+                best_move = (Some(mymove), h);
             }
-        } else {
-            // Choose first available move.
-            let mut moves = game.possible_moves();
-            // if moves.len() == 0 {
-            //     return None;
-            // }
-            // return Some(moves[0].clone());
-            return moves.next();
         }
-        //println!("{}",best_move.1);
-        best_move.0 // Return the move that corresponds with best heuristic
+    } else {
+        // Choose first available move.
+        let mut moves = game.possible_moves();
+        // if moves.len() == 0 {
+        //     return None;
+        // }
+        // return Some(moves[0].clone());
+        return moves.next();
     }
-
+    //println!("{}",best_move.1);
+    best_move.0 // Return the move that corresponds with best heuristic
+}
 
 // Need a helper because the client shouldn't provide alpha and beta
 // also nice because we don't have to have return valus of structs/tuples, can just do an isize
 // that corresponds to the best value for the immediately next move
-fn minimax_helper<G>(game: &G, depth: usize, is_opponent: bool, mut alpha: isize, mut beta: isize) -> isize
-    where
-        G: HeuristicGameTree{
+fn minimax_helper<G>(
+    game: &G,
+    depth: usize,
+    is_opponent: bool,
+    mut alpha: isize,
+    mut beta: isize,
+) -> isize
+where
+    G: HeuristicGameTree,
+{
     let mut current_heuristic = game.heuristic();
     if depth > 0 {
         // End of depth, return
@@ -120,7 +125,7 @@ fn minimax_helper<G>(game: &G, depth: usize, is_opponent: bool, mut alpha: isize
         for mymove in game.possible_moves() {
             let mut next_state = game.clone();
             let opp = next_state.execute_move(&mymove.clone(), is_opponent);
-            let h = minimax_helper(&next_state,depth - 1, opp, alpha, beta);
+            let h = minimax_helper(&next_state, depth - 1, opp, alpha, beta);
             if (h > child_heuristic && is_opponent) || (h < child_heuristic && !is_opponent) {
                 child_heuristic = h;
             }

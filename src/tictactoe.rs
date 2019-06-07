@@ -1,9 +1,8 @@
+use super::*;
 use crate::general_game::print_piece;
 use crate::general_game::Piece;
-use std::io::{stdin, stdout, Write};
-use super::*;
 use crate::minimax;
-
+use std::io::{stdin, stdout, Write};
 
 const TICWINS: [[usize; 3]; 8] = [
     [0, 1, 2],
@@ -38,7 +37,7 @@ impl<'a> HeuristicGameTree for TicGame {
         let o_streak = self.clone().check_win(Piece::O).1;
         o_streak - x_streak
     }
-    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
+    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool {
         self.store_move(*next_move, if is_opponent { Piece::O } else { Piece::X });
         !is_opponent
     }

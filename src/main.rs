@@ -1,9 +1,7 @@
 use std::io::{stdout, Write};
 use std::{env, process};
 
-
 use heuristic_game_tree::general_game;
-
 
 fn main() -> std::io::Result<()> {
     //let (game_num, difficulty_num) = choose_game(read_input().0, read_input().1);
@@ -23,7 +21,9 @@ fn main() -> std::io::Result<()> {
 
 fn read_input() -> (String, String) {
     let game = env::args().nth(1).unwrap_or_else(|| {
-        eprintln!("Error. Please provide a proper game name and run again\nSyntax: game difficulty");
+        eprintln!(
+            "Error. Please provide a proper game name and run again\nSyntax: game difficulty"
+        );
         ::std::process::exit(1);
     });
     let difficulty = "".to_owned();
@@ -37,30 +37,30 @@ fn choose_game(game: String) -> usize {
     //let difficulty_num = difficulty_level(difficulty);
 
     let game = game.to_lowercase();
-        if game.contains("tic") {
-            1
-        } else if game.contains("connect4") {
-            2
-        } else if game.contains("checkers") {
-            3
-        } else {
-            eprintln!("Sorry, we do not offer that game! BYE!");
-            process::exit(1);
-        }
+    if game.contains("tic") {
+        1
+    } else if game.contains("connect4") {
+        2
+    } else if game.contains("checkers") {
+        3
+    } else {
+        eprintln!("Sorry, we do not offer that game! BYE!");
+        process::exit(1);
+    }
 }
 
 fn difficulty_level(difficulty: String) -> usize {
     let _ = stdout().flush();
     let difficulty = difficulty.to_lowercase();
-        if difficulty.contains("easy") {
-            1
-        } else if difficulty.contains("med") {
-            2
-        } else if difficulty.contains("hard") {
-            3
-        } else {
-            2
-        }
+    if difficulty.contains("easy") {
+        1
+    } else if difficulty.contains("med") {
+        2
+    } else if difficulty.contains("hard") {
+        3
+    } else {
+        2
+    }
 }
 
 #[cfg(test)]

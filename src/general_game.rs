@@ -82,8 +82,6 @@ pub fn print_piece<'a>(item: Option<Piece>) -> &'a str {
     "O"
 }
 
-
-
 #[cfg(test)]
 mod gen_game_tests {
     use super::print_piece;

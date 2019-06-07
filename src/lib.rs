@@ -1,9 +1,8 @@
 pub mod checkers;
 pub mod connect4;
 pub mod general_game;
-pub mod tictactoe;
 pub mod minimax;
-
+pub mod tictactoe;
 
 #[allow(unused)]
 /// A trait for the ability to make a game tree of possible moves with values of heuristic evaluations.

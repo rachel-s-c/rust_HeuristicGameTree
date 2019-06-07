@@ -1,9 +1,9 @@
+use super::*;
 use crate::general_game::print_piece;
 use crate::general_game::Piece;
+use crate::minimax;
 use std::cmp::max;
 use std::io::{stdin, stdout, Write};
-use super::*;
-use crate::minimax;
 
 impl<'a> HeuristicGameTree for ConGame {
     type Move = usize;
@@ -26,42 +26,35 @@ impl<'a> HeuristicGameTree for ConGame {
                 if mutableself.board[a][b] == Some(Piece::X) {
                     let cur = mutableself.check_win_and_length(a, b, Piece::X).1;
                     x_streak = max(cur, x_streak);
-                    if x_streak >= 4
-                    {
+                    if x_streak >= 4 {
                         x_streak = 4;
                         break 'outer;
                     }
                 }
             }
         }
-            'outer2: for a in 0..6 {
-                for b in 0..5 {
-                    if mutableself.board[a][b] == Some(Piece::O) {
-                        let cur = mutableself.check_win_and_length(a, b, Piece::O).1;
-                        o_streak = max(cur, o_streak);
-                        if o_streak >= 4
-                        {
-                            o_streak = 4;
-                            break 'outer2;
-                        }
+        'outer2: for a in 0..6 {
+            for b in 0..5 {
+                if mutableself.board[a][b] == Some(Piece::O) {
+                    let cur = mutableself.check_win_and_length(a, b, Piece::O).1;
+                    o_streak = max(cur, o_streak);
+                    if o_streak >= 4 {
+                        o_streak = 4;
+                        break 'outer2;
                     }
                 }
             }
+        }
 
-        if x_streak == 4
-        {
+        if x_streak == 4 {
             x_streak
-        }
-        else if o_streak == 4
-        {
+        } else if o_streak == 4 {
             -o_streak
-        }
-        else {
+        } else {
             x_streak - o_streak
         }
-
     }
-    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool{
+    fn execute_move(&mut self, next_move: &Self::Move, is_opponent: bool) -> bool {
         let (_val, loc) = self.clone().validmove(next_move + 1);
         self.store_move(
             *next_move,
