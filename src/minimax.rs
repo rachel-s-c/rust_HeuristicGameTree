@@ -29,6 +29,7 @@ use core::isize::{MAX, MIN};
 /// Basic usage:
 /// ```
 /// #[derive(PartialEq, Copy, Clone, Debug)]
+/// // Creating components of a Connect4Game
 /// pub enum Piece {
 ///    /// An 'X' piece
 ///    X,
@@ -49,6 +50,8 @@ use core::isize::{MAX, MIN};
 ///    }
 /// }
 /// # use heuristic_game_tree::HeuristicGameTree;
+/// // Implementing the HeuristicGameTree trait for the Connect4Game
+/// // since minimax_search takes in an argument `game` that has the trait HeuristicGameTree
 /// impl HeuristicGameTree for Connect4Game{
 ///     type Move = usize;
 ///
@@ -67,6 +70,7 @@ use core::isize::{MAX, MIN};
 /// }
 ///
 /// # use heuristic_game_tree::minimax::minimax_search;
+/// // creating the arguments for minimax_search(Connect4Game, medium difficulty, opponent's turn)
 /// let mut new_game = Connect4Game::new();
 /// let difficulty: usize = 2;
 /// let boolean = true;
