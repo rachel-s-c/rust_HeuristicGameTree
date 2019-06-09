@@ -1,6 +1,6 @@
 use super::*;
 use crate::minimax;
-use std::io::{stdin, stdout, Write};
+use std::io::{stdout, Write,};
 
 // Could be adjusted by user, but must be even for our algos
 const BOARDWIDTH: usize = 8;
@@ -96,26 +96,29 @@ impl<'a> CheckersGame {
         }
     }
 
-    pub fn print_board(&self) {
-        println!("  A B C D E F G H");
+    pub fn print_board<W: Write>(&self, output: &mut W) -> std::io::Result<()> {
+        writeln!(output,"  A B C D E F G H")?;
         for i in 0..4 {
-            println!(
+            writeln!(
+            	output,
                 "{} {}   {}   {}   {}",
                 i * 2 + 1,
                 print_piece(&self.board[i * 8]),
                 print_piece(&self.board[1 + i * 8]),
                 print_piece(&self.board[2 + i * 8]),
                 print_piece(&self.board[3 + i * 8]),
-            );
-            println!(
-                "{}   {}   {}   {}   {}   ",
+            )?;
+            writeln!(
+            	output,
+                "{}   {}   {}   {}   {}",
                 i * 2 + 2,
                 print_piece(&self.board[4 + i * 8]),
                 print_piece(&self.board[5 + i * 8]),
                 print_piece(&self.board[6 + i * 8]),
                 print_piece(&self.board[7 + i * 8]),
-            );
+            )?;
         }
+        Ok(())
     }
     pub fn possible_positions_jump(&self, start: usize) -> Vec<(usize, usize, Option<usize>)> {
         let mut pos: Vec<(usize, usize, Option<usize>)> = Vec::new();
@@ -325,17 +328,6 @@ impl<'a> HeuristicGameTree for CheckersGame {
         Box::new(positions.into_iter())
     }
 }
-
-/*
-0     1     2     3
-   4     5     6     7
-8     9     10    11
-   12    13    14    15
-16    17    18    19
-   20    21    22    23
-24    25    26    27
-   28    29    30    31
-*/
 /// Starts the Checkers game
 ///
 /// # Arguments
@@ -346,19 +338,20 @@ impl<'a> HeuristicGameTree for CheckersGame {
 ///                  determining its move)
 pub fn start_checkers(difficulty: usize) {
     let mut game = CheckersGame::new();
+    //println!("Enter start location and end location as such:  B6 A5. You are o");
     println!("Enter start location and end location as such:  B6 A5. You are o");
     while game.who_won().is_none() {
         if game.is_opponent_turn() {
-            game.print_board();
+            game.print_board(&mut std::io::stdout()).expect("Error printing board");
         }
         while game.is_opponent_turn() {
             print!("Opponent's move ... ");
+            std::io::stdout().flush().unwrap();
             let next_move = minimax::minimax_search(&game, difficulty * 6, true);
             println!("Done");
             if let Some(m) = next_move {
                 game.execute_move(&m, true);
             } else {
-                println!("Should never reach here");
                 game.give_up_turn();
             }
             game.check_winner();
@@ -366,13 +359,11 @@ pub fn start_checkers(difficulty: usize) {
         if game.who_won().is_some() {
             break;
         }
-        game.print_board();
+        game.print_board(&mut std::io::stdout()).expect("Error printing board");
         print!(">>> ");
         let _ = stdout().flush();
         let mut loc = String::new();
-        stdin()
-            .read_line(&mut loc)
-            .expect("Did not enter a correct string");
+        std::io::stdin().read_line(&mut loc).expect("Failed to read input");
         let mut loc = loc.chars();
         let mut start = 0;
         let mut end = 0;
@@ -384,7 +375,7 @@ pub fn start_checkers(difficulty: usize) {
             if c < 73 && c > 64 {
                 start += (c - 65 - (c - 1) % 2) / 2;
             } else {
-                println!("Incorrect starting position column, please enter again");
+                print!("Incorrect starting position column, please enter again");
                 continue;
             }
         }
@@ -428,17 +419,178 @@ pub fn start_checkers(difficulty: usize) {
             println!("Invalid move (remember if you have a jump, you must take it");
         }
     }
-    game.print_board();
+    game.print_board(&mut std::io::stdout()).expect("Error printing board");
     println!("The winning piece is {}", game.who_won().unwrap());
 }
 
 #[cfg(test)]
 mod check_tests {
     use super::CheckersGame;
+    use crate::HeuristicGameTree;
+    use super::Piece;
 
     #[test]
-    fn new_check_test() {
+    fn no_winner_test() {
         let check_1 = CheckersGame::new();
         assert!(check_1.who_won().is_none());
     }
+
+    #[test]
+    fn print_board_test() {
+    	let game = CheckersGame::new();
+    	let mut output = Vec::new();
+    	game.print_board(&mut output).unwrap();
+    	assert_eq!(&String::from_utf8(output).unwrap(),
+    		&"  A B C D E F G H
+1 x   x   x   x
+2   x   x   x   x
+3 x   x   x   x
+4                
+5              
+6   o   o   o   o
+7 o   o   o   o
+8   o   o   o   o
+".to_owned());
+    }
+
+    #[test]
+    fn move_piece_test() {
+    	let mut game = CheckersGame::new();
+    	let mut output = Vec::new();
+    	game.execute_move(&(20,16,None),false);
+    	game.print_board(&mut output).unwrap();
+    	assert_eq!(&String::from_utf8(output).unwrap(),
+    		&"  A B C D E F G H
+1 x   x   x   x
+2   x   x   x   x
+3 x   x   x   x
+4                
+5 o            
+6       o   o   o
+7 o   o   o   o
+8   o   o   o   o
+".to_owned());
+    }
+
+    #[test]
+    fn jump_piece_test() {
+    	let mut game = CheckersGame::new();
+    	let mut output = Vec::new();
+    	game.execute_move(&(20,17,None),false);
+    	game.execute_move(&(9,12,None),false);
+    	game.execute_move(&(21,18,None),false);
+    	game.execute_move(&(12,21,Some(17)),false);
+    	game.print_board(&mut output).unwrap();
+    	assert_eq!(&String::from_utf8(output).unwrap(),
+    		&"  A B C D E F G H
+1 x   x   x   x
+2   x   x   x   x
+3 x       x   x
+4                
+5         o    
+6       x   o   o
+7 o   o   o   o
+8   o   o   o   o
+".to_owned());
+    }
+
+    #[test]
+    fn valid_move_test() {
+    	let game = CheckersGame::new();
+    	assert!(game.valid_move(20,17).is_some());
+    }
+
+    #[test]
+    fn invalid_move_test() {
+    	let game = CheckersGame::new();
+    	assert!(game.valid_move(17,17).is_none());
+    }
+
+    #[test]
+    fn force_jump_test() {
+    	let mut game = CheckersGame::new();
+    	game.execute_move(&(20,17,None),false);
+    	game.execute_move(&(9,12,None),false);
+    	game.execute_move(&(21,18,None),false);
+    	let moves: Vec<(usize,usize,Option<usize>)> = game.possible_moves().collect();
+    	assert_eq!(moves.len(),1);
+    	// Only allows one move, the jump move, see board in jump_piece_test()
+    }
+
+    #[test]
+    fn force_repeated_jump_test() {
+    	let mut game = CheckersGame::new();
+    	game.board = [
+    		None,Some(Piece::X),None,Some(Piece::X),
+    		Some(Piece::O),Some(Piece::O),Some(Piece::O),None,
+    		None,None,None,None,
+    		Some(Piece::O),None,None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    	];
+    	game.is_o_turn = false;
+    	// easier than trying to move the board into this position
+    	let moves: Vec<(usize,usize,Option<usize>)> = game.possible_moves().collect();
+    	assert_eq!(moves.len(),3);
+    	// Do one jump
+    	game.execute_move(&(1,8,Some(4)),false);
+    	let moves: Vec<(usize,usize,Option<usize>)> = game.possible_moves().collect();
+    	// Only one jump available from the piece that just jumped.
+    	assert_eq!(moves.len(),1);
+    	assert!(game.is_opponent_turn());
+    }
+
+    #[test]
+    fn heuristic_test() {
+    	let mut game = CheckersGame::new();
+    	assert_eq!(game.heuristic(),0);
+    	game.execute_move(&(20,17,None),false);
+    	assert_eq!(game.heuristic(),0);
+    	game.execute_move(&(9,12,None),false);
+    	assert_eq!(game.heuristic(),0);
+    	game.execute_move(&(21,18,None),false);
+    	assert_eq!(game.heuristic(),0);
+    	game.execute_move(&(12,21,Some(17)),false);
+    	assert_eq!(game.heuristic(),1);
+    }
+
+    #[test]
+    fn make_kings_test() {
+    	let mut game = CheckersGame::new();
+    	game.board = [
+    		None,Some(Piece::X),None,Some(Piece::O),
+    		Some(Piece::X),Some(Piece::O),None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    		None,None,None,None,
+    		None,Some(Piece::X),None,Some(Piece::O),
+    	];
+    	game.maybe_make_king(1);  // x on its own side (no)
+    	game.maybe_make_king(3);  // o on opposite side (yes)
+    	game.maybe_make_king(4);  // not on end (no)
+    	game.maybe_make_king(5);  // not on end (no)
+    	game.maybe_make_king(29); // x on opposite side (yes)
+    	game.maybe_make_king(31); // o on its own side (no)
+    	assert!(!game.board[1].clone().unwrap().is_king());
+    	assert!(game.board[3].clone().unwrap().is_king());
+    	assert!(game.board[29].clone().unwrap().is_king());
+    	assert!(!game.board[31].clone().unwrap().is_king());
+    	assert!(!game.board[4].clone().unwrap().is_king());
+    	assert!(!game.board[5].clone().unwrap().is_king());
+    }
 }
+
+/*
+0     1     2     3
+   4     5     6     7
+8     9     10    11
+   12    13    14    15
+16    17    18    19
+   20    21    22    23
+24    25    26    27
+   28    29    30    31
+*/
