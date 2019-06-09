@@ -21,9 +21,11 @@ impl<'a> HeuristicGameTree for TicGame {
     // fn possible_moves(&self) -> Iterator<Item = Self::Move> {
     fn possible_moves(&self) -> Box<Iterator<Item = Self::Move> + '_> {
         let mut list = Vec::new();
-        for i in 0..9 {
-            if self.board[i].is_none() {
-                list.push(i);
+        if !self.check_win(Piece::X).0 && !self.check_win(Piece::O).0 {
+            for i in 0..9 {
+                if self.board[i].is_none() {
+                    list.push(i);
+                }
             }
         }
         // list.iter()
@@ -103,7 +105,7 @@ impl<'a> TicGame {
         self.board[position] = Some(player);
     }
 
-    fn check_win(&mut self, player: Piece) -> (bool, isize) {
+    fn check_win(&self, player: Piece) -> (bool, isize) {
         let mut lengths = Vec::new();
         for vecs in TICWINS.iter() {
             let mut in_row = 0;

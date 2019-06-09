@@ -84,12 +84,16 @@ where
 {
     let mut best_move = (None, MIN); // We're going to maximize heuristic
     if depth > 0 {
+        let mut alpha = MIN;
         for mymove in game.possible_moves() {
             let mut next_state = game.clone();
             let opp = next_state.execute_move(&mymove, is_opponent); // Need to clone, standard procedure with minimax
-            let h = minimax_helper(&next_state, depth - 1, opp, MAX, MIN);
+            let h = minimax_helper(&next_state, depth - 1, opp, alpha, MAX);
             if h > best_move.1 {
                 best_move = (Some(mymove), h);
+            }
+            if h > alpha {
+                alpha = h;
             }
         }
     } else {
@@ -101,7 +105,7 @@ where
         // return Some(moves[0].clone());
         return moves.next();
     }
-    //println!("{}",best_move.1);
+    println!("{}",best_move.1);
     best_move.0 // Return the move that corresponds with best heuristic
 }
 
@@ -118,18 +122,17 @@ fn minimax_helper<G>(
 where
     G: HeuristicGameTree,
 {
-    let mut current_heuristic = game.heuristic();
+    //let mut current_heuristic = game.heuristic();
     if depth > 0 {
-        // End of depth, return
-        let mut child_heuristic = if is_opponent { MIN } else { MAX };
+        let mut heuristic = if is_opponent { MIN+1 } else { MAX-1 };
         for mymove in game.possible_moves() {
             let mut next_state = game.clone();
             let opp = next_state.execute_move(&mymove.clone(), is_opponent);
             let h = minimax_helper(&next_state, depth - 1, opp, alpha, beta);
-            if (h > child_heuristic && is_opponent) || (h < child_heuristic && !is_opponent) {
-                child_heuristic = h;
+            if (h > heuristic && is_opponent) || (h < heuristic && !is_opponent) {
+                heuristic = h;
             }
-            if is_opponent && h <= alpha {
+            if is_opponent && h > alpha {
                 alpha = h;
             } else if !is_opponent && h < beta {
                 beta = h;
@@ -138,9 +141,12 @@ where
                 break;
             }
         }
-        if (child_heuristic > MIN && is_opponent) || (child_heuristic < MAX && !is_opponent) {
-            current_heuristic = child_heuristic;
-        }
+        // If no moves, and is opponent, this means the player won, so return MIN
+        // else if no moves and is not opponent, this means AI won, return MAX
+        heuristic
     }
-    current_heuristic
+    // End of depth, return
+    else {
+        game.heuristic()
+    }
 }

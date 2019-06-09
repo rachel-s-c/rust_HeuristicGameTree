@@ -391,7 +391,7 @@ pub fn start_checkers(difficulty: usize) {
         }
         while game.is_opponent_turn() {
             print!("Opponent's move ... ");
-            let next_move = minimax::minimax_search(&game, difficulty * 12, true);
+            let next_move = minimax::minimax_search(&game, difficulty * 6, true);
             println!("Done");
             if let Some(m) = next_move {
                 game.execute_move(&m, true);
