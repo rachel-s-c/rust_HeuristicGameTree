@@ -123,84 +123,34 @@ impl<'a> CheckersGame {
         let threshold = BOARDWIDTH / 2 - 1;
         if (start + BOARDWIDTH - 1) % BOARDWIDTH < threshold {
             if start < BOARDSIZE - BOARDWIDTH {
-                // cannot combine if statements, else risk out of bounds
-                if let Some(p) = &self.board[start + BOARDWIDTH / 2 - 1] {
-                    if p.is_x() == self.is_o_turn {
-                        // Found a bordering enemy, add it to pos vec
-                        pos.push((
-                            start,
-                            start + BOARDWIDTH - 1,
-                            Some(start + BOARDWIDTH / 2 - 1),
-                        ));
-                    }
-                }
+                self.maybe_add_jump(start,start + BOARDWIDTH / 2 - 1,start + BOARDWIDTH - 1,&mut pos);
             }
             if start >= BOARDWIDTH {
-                if let Some(p) = &self.board[start - BOARDWIDTH / 2 - 1] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((
-                            start,
-                            start - BOARDWIDTH - 1,
-                            Some(start - BOARDWIDTH / 2 - 1),
-                        ));
-                    }
-                }
+                self.maybe_add_jump(start,start - BOARDWIDTH / 2 - 1,start - BOARDWIDTH - 1,&mut pos);
             }
         }
         if (start + BOARDWIDTH / 2 - 1) % BOARDWIDTH < threshold {
             if start < BOARDSIZE - BOARDWIDTH {
-                if let Some(p) = &self.board[start + BOARDWIDTH / 2] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((start, start + BOARDWIDTH - 1, Some(start + BOARDWIDTH / 2)));
-                    }
-                }
+                self.maybe_add_jump(start,start + BOARDWIDTH / 2,start + BOARDWIDTH - 1,&mut pos);
             }
             if start >= BOARDWIDTH {
-                if let Some(p) = &self.board[start - BOARDWIDTH / 2] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((start, start - BOARDWIDTH - 1, Some(start - BOARDWIDTH / 2)));
-                    }
-                }
+                self.maybe_add_jump(start,start - BOARDWIDTH / 2,start - BOARDWIDTH - 1,&mut pos);
             }
         }
         if start % BOARDWIDTH < threshold {
             if start < BOARDSIZE - BOARDWIDTH {
-                if let Some(p) = &self.board[start + BOARDWIDTH / 2] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((start, start + BOARDWIDTH + 1, Some(start + BOARDWIDTH / 2)));
-                    }
-                }
+                self.maybe_add_jump(start,start + BOARDWIDTH / 2,start + BOARDWIDTH + 1,&mut pos);
             }
             if start >= BOARDWIDTH {
-                if let Some(p) = &self.board[start - BOARDWIDTH / 2] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((start, start - BOARDWIDTH + 1, Some(start - BOARDWIDTH / 2)));
-                    }
-                }
+                self.maybe_add_jump(start,start - BOARDWIDTH / 2,start - BOARDWIDTH + 1,&mut pos);
             }
         }
         if (start + BOARDWIDTH / 2) % BOARDWIDTH < threshold {
             if start < BOARDSIZE - BOARDWIDTH {
-                if let Some(p) = &self.board[start + BOARDWIDTH / 2 + 1] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((
-                            start,
-                            start + BOARDWIDTH + 1,
-                            Some(start + BOARDWIDTH / 2 + 1),
-                        ));
-                    }
-                }
+                self.maybe_add_jump(start,start + BOARDWIDTH / 2 + 1,start + BOARDWIDTH + 1,&mut pos);
             }
             if start >= BOARDWIDTH {
-                if let Some(p) = &self.board[start - BOARDWIDTH / 2 + 1] {
-                    if p.is_x() == self.is_o_turn {
-                        pos.push((
-                            start,
-                            start - BOARDWIDTH + 1,
-                            Some(start - BOARDWIDTH / 2 + 1),
-                        ));
-                    }
-                }
+                self.maybe_add_jump(start,start - BOARDWIDTH / 2 + 1,start - BOARDWIDTH + 1,&mut pos);
             }
         }
         // Filter out any skips where the destination is not empty
@@ -217,6 +167,18 @@ impl<'a> CheckersGame {
                 }
             })
             .collect()
+    }
+    fn maybe_add_jump(&self, start: usize, jump_over: usize, jump_to: usize, list: &mut Vec<(usize,usize,Option<usize>)>) {
+        if let Some(p) = &self.board[jump_over] {
+            if p.is_x() == self.is_o_turn {
+                // Found a bordering enemy, add it to pos vec
+                list.push((
+                    start,
+                    jump_to,
+                    Some(jump_over),
+                ));
+            }
+        }
     }
     pub fn possible_positions_no_jump(&self, start: usize) -> Vec<(usize, usize, Option<usize>)> {
         // In American checkers, if a jump is possible from a player, the player must make the jump
@@ -470,15 +432,13 @@ pub fn start_checkers(difficulty: usize) {
     println!("The winning piece is {}", game.who_won().unwrap());
 }
 
-// #[cfg(test)]
-// mod check_tests {
-//     use super::print_piece;
-//     use super::CheckersGame;
-//     use super::Piece;
+#[cfg(test)]
+mod check_tests {
+    use super::CheckersGame;
 
-//     #[test]
-//     fn new_check_test() {
-//         let check_1 = CheckersGame::new();
-//         assert!(check_1.winner.is_none());
-//     }
-// }
+    #[test]
+    fn new_check_test() {
+        let check_1 = CheckersGame::new();
+        assert!(check_1.who_won().is_none());
+    }
+}

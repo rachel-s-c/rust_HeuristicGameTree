@@ -99,13 +99,8 @@ where
     } else {
         // Choose first available move.
         let mut moves = game.possible_moves();
-        // if moves.len() == 0 {
-        //     return None;
-        // }
-        // return Some(moves[0].clone());
         return moves.next();
     }
-    println!("{}",best_move.1);
     best_move.0 // Return the move that corresponds with best heuristic
 }
 

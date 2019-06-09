@@ -258,15 +258,15 @@ mod tic_tests {
 
     #[test]
     fn valid_tic_test() {
-        let mut tic_1 = TicGame::new();
-        let (a, b) = tic_1.validmove("A", 2);
+        let tic_1 = TicGame::new();
+        let (a, _b) = tic_1.validmove("A", 2);
         assert!(a);
     }
 
     #[test]
     fn invalid_tic_test() {
-        let mut tic_1 = TicGame::new();
-        let (a, b) = tic_1.validmove("D", 2);
+        let tic_1 = TicGame::new();
+        let (a, _b) = tic_1.validmove("D", 2);
         assert!(!a);
     }
 

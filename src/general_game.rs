@@ -38,13 +38,6 @@ impl Piece {
             false
         }
     }
-    fn is_o(self) -> bool {
-        if let Piece::O = self {
-            true
-        } else {
-            false
-        }
-    }
 }
 
 /// Prints the game piece on the game board.
@@ -91,12 +84,6 @@ mod gen_game_tests {
     fn x_check() {
         let x = Piece::X;
         assert!(x.is_x());
-    }
-
-    #[test]
-    fn o_check() {
-        let o = Piece::O;
-        assert!(o.is_o());
     }
 
     #[test]
