@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `minimax_search` fn in crate `heuristic_game_tree`."><meta name="keywords" content="rust, rustlang, rust-lang, minimax_search"><title>heuristic_game_tree::minimax::minimax_search - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><div class="sidebar-elems"><p class='location'><a href='../index.html'>heuristic_game_tree</a>::<wbr><a href='index.html'>minimax</a></p><script>window.sidebarCurrent = {name: 'minimax_search', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/heuristic_game_tree/minimax.rs.html#79-103' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='../index.html'>heuristic_game_tree</a>::<wbr><a href='index.html'>minimax</a>::<wbr><a class="fn" href=''>minimax_search</a></span></h1><pre class='rust fn'>pub fn minimax_search&lt;G&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;game: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>G, <br>&nbsp;&nbsp;&nbsp;&nbsp;depth: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;is_opponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;G::<a class="type" href="../../heuristic_game_tree/trait.HeuristicGameTree.html#associatedtype.Move" title="type heuristic_game_tree::HeuristicGameTree::Move">Move</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;G: <a class="trait" href="../../heuristic_game_tree/trait.HeuristicGameTree.html" title="trait heuristic_game_tree::HeuristicGameTree">HeuristicGameTree</a>,&nbsp;</span></pre><div class='docblock'><p>Function: Minimax with alpha-beta pruning.
+Minimax is a decision rule that minimizes the possible loss for a worst case (maximum loss) scenario,
+and maximizes the possible gain for a best case (maximum win) scenario. This function is
+deterministic and does not take into account uncertainty (random chance elements).</p>
+<p>This function gets all the possible moves (i.e. children), then executes each move on a
+copy of the game. It gets the heuristic of each game copy executed on a next move by calling
+minimax recursively.</p>
+<p>The game tree is cut off at a certain maximum depth, d (called a d-ply search), depending on the
+difficulty rating picked by the player. The heuristic function to those positions are at the
+bottom nodes of the tree, so instead of just Win, Loss, Tie, there is a heuristic score.</p>
+<h1 id="arguments" class="section-header"><a href="#arguments">Arguments</a></h1>
+<ul>
+<li>
+<p><code>depth</code> - A usize that holds the depth of the minimax tree
+(it is the number of moves that the computer agent will plan ahead, and it
+represents the the difficulty of the game)</p>
+</li>
+<li>
+<p><code>is_opponent</code> - A boolean that represents whether it is the player or computer's turn</p>
+</li>
+</ul>
+<p>Returns the best move (i.e. the move corresponding to the best heuristic)</p>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<p>Basic usage:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Piece</span> {
+   <span class="doccomment">/// An &#39;X&#39; piece</span>
+   <span class="ident">X</span>,
+   <span class="doccomment">/// An &#39;O&#39; piece</span>
+   <span class="ident">O</span>,
+}
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="kw">struct</span> <span class="ident">Connect4Game</span> {
+   <span class="ident">board</span>: [[<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Piece</span><span class="op">&gt;</span>; <span class="number">6</span>]; <span class="number">7</span>],
+   <span class="ident">winner</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Piece</span><span class="op">&gt;</span>,
+}
+<span class="kw">impl</span> <span class="ident">Connect4Game</span> {
+   <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+       <span class="ident">Connect4Game</span> {
+           <span class="ident">board</span>: [[<span class="prelude-val">None</span>; <span class="number">6</span>]; <span class="number">7</span>],
+           <span class="ident">winner</span>: <span class="prelude-val">None</span>,
+       }
+   }
+}
+<span class="kw">impl</span> <span class="ident">HeuristicGameTree</span> <span class="kw">for</span> <span class="ident">Connect4Game</span>{
+    <span class="kw">type</span> <span class="ident">Move</span> <span class="op">=</span> <span class="ident">usize</span>;
+
+    <span class="comment">// Returns a box that contains a pointer to an iterator of all the moves that can be made</span>
+    <span class="kw">fn</span> <span class="ident">possible_moves</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">Move</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+       <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">list</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+       <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">7</span> { <span class="ident">list</span>.<span class="ident">push</span>(<span class="ident">i</span>);}
+       <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">list</span>.<span class="ident">into_iter</span>())
+}
+
+    <span class="comment">// Returns the value of the heuristic that determines if the move is advantageous.</span>
+    <span class="kw">fn</span> <span class="ident">heuristic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">isize</span> {<span class="number">4</span>}
+
+    <span class="comment">// Returns whether the move has been made.</span>
+    <span class="kw">fn</span> <span class="ident">execute_move</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">next_move</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Move</span>, <span class="ident">is_opponent</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">bool</span>{<span class="bool-val">true</span>}
+}
+
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_game</span> <span class="op">=</span> <span class="ident">Connect4Game</span>::<span class="ident">new</span>();
+<span class="kw">let</span> <span class="ident">difficulty</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">2</span>;
+<span class="kw">let</span> <span class="ident">boolean</span> <span class="op">=</span> <span class="bool-val">true</span>;
+
+<span class="comment">// next_move is an Option&lt;usize&gt;</span>
+<span class="comment">// since we are beginning with an empty Connect4Game board, the best move is the first move (i.e. 0)</span>
+<span class="kw">let</span> <span class="ident">next_move</span> <span class="op">=</span> <span class="ident">minimax_search</span>(<span class="kw-2">&amp;</span><span class="ident">new_game</span>, <span class="number">3</span> <span class="op">*</span> <span class="ident">difficulty</span>, <span class="ident">boolean</span>);
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">0</span>, <span class="ident">next_move</span>.<span class="ident">unwrap</span>());</pre></div>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "heuristic_game_tree";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>
