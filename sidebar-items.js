@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["checkers",""],["connect4",""],["general_game",""],["minimax",""],["tictactoe",""]],"trait":[["HeuristicGameTree","A trait for the ability to make a game tree of possible moves with values of heuristic evaluations."]]});

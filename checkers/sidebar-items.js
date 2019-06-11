@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["Piece",""]],"fn":[["print_piece",""],["start_checkers","Starts the Checkers game"]]});
