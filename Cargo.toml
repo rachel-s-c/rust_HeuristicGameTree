@@ -1,7 +1,0 @@
-[package]
-name = "heuristic_game_tree"
-version = "0.1.0"
-authors = ["patricksachaj", "rachelseng", "charliecollar"]
-edition = "2018"
-
-[dependencies]
