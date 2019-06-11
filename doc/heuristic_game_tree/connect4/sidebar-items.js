@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["start_con","Starts the Connect4 game"]]});

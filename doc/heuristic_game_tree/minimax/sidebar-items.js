@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["minimax_search","Function: Minimax with alpha-beta pruning.  Minimax is a decision rule that minimizes the possible loss for a worst case (maximum loss) scenario,  and maximizes the possible gain for a best case (maximum win) scenario. This function is  deterministic and does not take into account uncertainty (random chance elements)."]]});

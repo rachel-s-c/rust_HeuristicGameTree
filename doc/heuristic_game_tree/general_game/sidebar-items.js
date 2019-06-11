@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Piece","Game pieces for a two-player game where all the pieces have equal value."]],"fn":[["lets_play","Starts the game after the player runs the program with the selected game."],["print_piece","Prints the game piece on the game board."]]});
